@@ -26,8 +26,34 @@
 #include <memory>
 #include <vector>
 
-//Heavily inspired from ElectronIDValueMapProducer
+//just for now to avoid checking in what seems like ~half of CMSSW, 
+//we take this function from EcalClusterTools
+//untill its in the release
 
+namespace tmp{
+  int nrSaturatedCrysIn5x5(const DetId& id,const EcalRecHitCollection* recHits,const CaloTopology *topology)
+  {
+    int nrSat=0;
+    CaloNavigator<DetId> cursor = CaloNavigator<DetId>( id, topology->getSubdetectorTopology( id ) );
+    
+    for ( int eastNr = -2; eastNr <= 2; ++eastNr ) { //east is eta in barrel
+      for ( int northNr = -2; northNr <= 2; ++northNr ) { //north is phi in barrel
+	cursor.home();
+	cursor.offsetBy( eastNr, northNr);
+	DetId id = *cursor;
+	auto recHitIt = recHits->find(id);
+	if(recHitIt!=recHits->end() && 
+	   recHitIt->checkFlag(EcalRecHit::kSaturated)){
+	  nrSat++;
+	}
+	
+      }
+    }
+    return nrSat;
+  }
+}
+
+//Heavily inspired from ElectronIDValueMapProducer
 
 class ElectronHEEPIDValueMapProducer : public edm::stream::EDProducer<> {
 private:
@@ -200,7 +226,8 @@ int ElectronHEEPIDValueMapProducer::nrSaturatedCrysIn5x5(const reco::GsfElectron
 { 
   DetId id = ele.superCluster()->seed()->seed();
   auto recHits = id.subdetId()==EcalBarrel ? ebHits.product() : eeHits.product();
-  return noZS::EcalClusterTools::nrSaturatedCrysIn5x5(id,recHits,caloTopo.product());
+  return tmp::nrSaturatedCrysIn5x5(id,recHits,caloTopo.product());
+  //  return noZS::EcalClusterTools::nrSaturatedCrysIn5x5(id,recHits,caloTopo.product());
 
 }
 
