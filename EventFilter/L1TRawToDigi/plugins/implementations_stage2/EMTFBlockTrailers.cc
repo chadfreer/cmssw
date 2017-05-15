@@ -1,8 +1,30 @@
+// Code to unpack the AMC13 trailer, "AMC data trailer", and "Event Record Trailer"
+
 #include "EventFilter/L1TRawToDigi/plugins/UnpackerFactory.h"
 
 #include "EMTFCollections.h"
 #include "EMTFUnpackerTools.h"
-#include "EMTFBlockTrailers.h"
+
+// This is the "header" - no EMTFBlockTrailers.h file is needed
+namespace l1t {
+  namespace stage2 {
+    namespace emtf {
+      
+      class TrailersBlockUnpacker : public Unpacker { // "TrailersBlockUnpacker" inherits from "Unpacker"
+      public:
+	virtual int  checkFormat(const Block& block);
+	virtual bool unpack(const Block& block, UnpackerCollections *coll) override; // Apparently it's always good to use override in C++
+	// virtual bool packBlock(const Block& block, UnpackerCollections *coll) override;
+      };
+      
+      // class TrailersBlockPacker : public Packer { // "TrailersBlockPacker" inherits from "Packer"
+      // public:
+      // 	virtual bool unpack(const Block& block, UnpackerCollections *coll) override; // Apparently it's always good to use override in C++
+      // };
+      
+    }
+  }
+}
 
 namespace l1t {
   namespace stage2 {
@@ -94,7 +116,7 @@ namespace l1t {
 	
 	if ( (res->at(iOut)).HasEventTrailer() == true )
 	  { (res->at(iOut)).add_format_error(); edm::LogError("L1T|EMTF") << "Why is there already an EventTrailer object?"; goto write_Event; }
-	if (EventTrailer_.Format_Errors() > 0) goto write_Event;
+	if (EventTrailer_.Format_errors() > 0) goto write_Event;
 
 	EventTrailer_.set_l1a       ( GetHexBits(TR1a,  0,  7) );
 	EventTrailer_.set_ddcsr_lf  ( GetHexBits(TR1a,  8, 11, TR1b,  8, 11) );
