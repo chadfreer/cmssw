@@ -330,7 +330,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
         else mpcLinkGood->Fill(j + 1 + offset, endcap * (i  + 0.5));
       }
     }
-    offset = (EventHeader->Sector() == 6 ? 0:EventHeader->Sector()) * 9;
+    offset = (EventHeader->Sector() == 6 ? 0 : EventHeader->Sector()) * 9;
     if (CO.ME1n_3() == 1) mpcLinkErrors->Fill(1 + offset, endcap * 5.5, (int) CO.ME1n_3());
     if (CO.ME1n_6() == 1) mpcLinkErrors->Fill(2 + offset, endcap * 5.5, (int) CO.ME1n_6());
     if (CO.ME1n_9() == 1) mpcLinkErrors->Fill(3 + offset, endcap * 5.5, (int) CO.ME1n_9());
@@ -417,7 +417,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
         }
       } else {
         cscid_offset = (sector == 6 ? 0 : sector) * 9;
-        cscLCTOccupancy->Fill(cscid + cscid_offset, endcap * 6);
+        cscLCTOccupancy->Fill(cscid + cscid_offset, endcap * 5.5);
       }
       
     }
@@ -475,8 +475,6 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
     emtfTrackQualityVsMode->Fill(mode, quality);
     if (mode == 15) emtfTrackPhiHighQuality->Fill(phi_glob_rad);
    }
-
-  std::cout << "Checkpoint Three" << endl << endl;
 
   // Regional Muon Candidates
   edm::Handle<l1t::RegionalMuonCandBxCollection> MuonBxCollection;
