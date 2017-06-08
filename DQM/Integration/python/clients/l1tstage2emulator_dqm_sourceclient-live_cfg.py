@@ -2,13 +2,12 @@ import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
 process = cms.Process("L1TStage2EmulatorDQM", eras.Run2_2016)
-
-#--------------------------------------------------
+#process = cms.Process("L1TStage2EmulatorDQM")
 # Event Source and Condition
 
 # Live Online DQM in P5
-process.load("DQM.Integration.config.inputsource_cfi")
-process.load("DQM.Integration.config.FrontierCondition_GT_cfi")
+process.load("DQM.Integration.config.fileinputsource_cfi")
+process.load("DQM.Integration.config.FrontierCondition_GT_autoExpress_cfi")
 # Due to the GT override in the above include, we have trouble with
 # conflicting CaloParams from stage1 and stage2.  This workaround
 # can go away once either the es_prefer is removed from DQM or the
