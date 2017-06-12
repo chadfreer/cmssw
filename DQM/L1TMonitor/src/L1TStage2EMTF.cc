@@ -509,7 +509,8 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
       } else {
         cscid_offset = (sector == 6 ? 0 : sector) * 9;
         cscLCTOccupancy->Fill(cscid + cscid_offset, endcap * 5.5);
-    
+       }
+     }
 	//Quality test *************************
      // if (neighbor == 0) {
         cscChamberStrip_QT[hist_index]->Fill(chamber, strip); 
@@ -536,10 +537,9 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	cscChamberStrip_QT_hot[hist_index]->getTH1()->SetBinContent(binX, binY, 1 - meanChamberStrip + sqrt((cscChamberStrip_QT[hist_index]->getTH1()->GetBinContent(binX, binY) + 1 - minValue)/(maxValue - minValue))); 
       }
     }
-	//End Quality test*************************
-     }
+	//End Quality test************************
       
-    }
+    
     if (Hit->Is_RPC() == true){
       if (station == 1) hist_index = 5;
       else if (station == 2) hist_index = 4;
