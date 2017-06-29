@@ -52,6 +52,9 @@ class QTestConfigure{
    ///Creates NoisyChannelROOT test
   void EnableNoisyChannelTest(std::string testName, 
                               const std::map<std::string,std::string>& params,DQMStore * bei);
+   ///Creates ContentSigmaROOT test added by Emma
+  void EnableContentSigmaTest(std::string testName, 
+                              const std::map<std::string,std::string>& params,DQMStore * bei);
     ///Creates MeanWithinExpectedROOT test
   void EnableMeanWithinExpectedTest(std::string testName, 
                                     const std::map<std::string,std::string>& params,DQMStore * bei);

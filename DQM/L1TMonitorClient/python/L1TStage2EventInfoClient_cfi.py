@@ -130,10 +130,21 @@ l1tStage2EventInfoClient = cms.EDAnalyzer("L1TEventInfoClient",
                         SystemDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
                             cms.PSet(
-                                QualityTestName = cms.string(""),
-                                QualityTestHist = cms.string(""),
-                                QualityTestSummaryEnabled = cms.uint32(0)
+                                QualityTestName = cms.string("NoisyChannel_Chamber"),
+                                QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStrip_QT*"),
+                                QualityTestSummaryEnabled = cms.uint32(1)
                                 ),
+                            cms.PSet(
+                                QualityTestName = cms.string("NoisyChannel_TrackBX"),
+                                QualityTestHist = cms.string("L1T/L1TStage2EMTF/emtfTrackBX_QT*"),
+                                QualityTestSummaryEnabled = cms.uint32(1)
+                                ),
+
+                            cms.PSet(                                
+				QualityTestName = cms.string("NoisyChannel_TrackPhi"),
+                                QualityTestHist = cms.string("L1T/L1TStage2EMTF/emtfTrackPhi_QT*"),
+                                QualityTestSummaryEnabled = cms.uint32(1)
+                                ) 
                             )
                         ),
                     cms.PSet(

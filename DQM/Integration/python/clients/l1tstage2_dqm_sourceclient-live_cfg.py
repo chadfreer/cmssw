@@ -7,10 +7,10 @@ process = cms.Process("L1TStage2DQM", eras.Run2_2016)
 # Event Source and Condition
 
 # Live Online DQM in P5
-process.load("DQM.Integration.config.inputsource_cfi")
+#process.load("DQM.Integration.config.inputsource_cfi")
 
 # Testing in lxplus
-#process.load("DQM.Integration.config.fileinputsource_cfi")
+process.load("DQM.Integration.config.fileinputsource_cfi")
 
 # Required to load Global Tag
 process.load("DQM.Integration.config.FrontierCondition_GT_cfi") 
@@ -64,17 +64,31 @@ process.l1tMonitorPath = cms.Path(
 )
 
 # Remove DQM Modules
-#process.l1tStage2online.remove(process.l1tStage2CaloLayer1)
-#process.l1tStage2online.remove(process.l1tStage2CaloLayer2)
-#process.l1tStage2online.remove(process.l1tStage2Bmtf)
-#process.l1tStage2online.remove(process.l1tStage2Emtf)
-#process.l1tStage2online.remove(process.l1tStage2uGMT)
-#process.l1tStage2online.remove(process.l1tStage2uGt)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2CaloLayer1)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2CaloLayer2)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2Bmtf)
+#process.l1tStage2OnlineDQM.remove(process.l1tStage2Emtf)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2uGMT)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2uGt)
+
+#--------------------------------------------------
+#Adding in data/emul (Chad Jun 6, 2017)
+#process.load("DQM.L1TMonitor.L1TStage2Emulator_cff")
+
+#process.l1tEmulatorMonitorPath = cms.Path(
+#    process.hltFatEventFilter +
+##    process.selfFatEventFilter +
+#    process.l1tStage2Unpack  +
+#    process.Stage2L1HardwareValidation +
+#    process.l1tStage2EmulatorOnlineDQM
+#    )
 
 #--------------------------------------------------
 # Stage2 Quality Tests
 process.load("DQM.L1TMonitorClient.L1TStage2MonitorClient_cff")
 process.l1tStage2MonitorClientPath = cms.Path(process.l1tStage2MonitorClient)
+process.load("DQM.L1TMonitorClient.L1TEMTFMonitorClient_cff")
+process.l1tEMTFMonitorClientPath = cms.Path(process.l1tEMTFMonitorClient)
 
 #--------------------------------------------------
 # Legacy DQM EndPath
@@ -89,7 +103,9 @@ process.l1tStage2MonitorClientPath = cms.Path(process.l1tStage2MonitorClient)
 process.schedule = cms.Schedule(
     process.rawToDigiPath,
     process.l1tMonitorPath,
+#    process.l1tEmulatorMonitorPath,
     process.l1tStage2MonitorClientPath,
+    process.l1tEMTFMonitorClientPath,
 #    process.l1tMonitorEndPath,
     process.dqmEndPath
 )

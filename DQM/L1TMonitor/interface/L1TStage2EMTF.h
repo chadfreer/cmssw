@@ -38,13 +38,15 @@ class L1TStage2EMTF : public DQMEDAnalyzer {
   bool verbose;
 
   MonitorElement* emtfErrors;
+  MonitorElement* mpcLinkErrors;
+  MonitorElement* mpcLinkGood;
 
-  MonitorElement* emtfHitBX;
-  MonitorElement* emtfHitStrip[18];
-  MonitorElement* emtfHitWire[18];
-  MonitorElement* emtfChamberStrip[18];
-  MonitorElement* emtfChamberWire[18];
-  MonitorElement* emtfHitOccupancy;
+  MonitorElement* cscLCTBX;
+  MonitorElement* cscLCTStrip[20];
+  MonitorElement* cscLCTWire[20];
+  MonitorElement* cscChamberStrip[20];
+  MonitorElement* cscChamberWire[20];
+  MonitorElement* cscLCTOccupancy;
   
   MonitorElement* emtfnTracks;
   MonitorElement* emtfTracknHits;
@@ -63,6 +65,26 @@ class L1TStage2EMTF : public DQMEDAnalyzer {
   MonitorElement* emtfMuonhwEta;
   MonitorElement* emtfMuonhwPhi;
   MonitorElement* emtfMuonhwQual;
+
+  MonitorElement* rpcHitBX;
+  MonitorElement* rpcHitOccupancy;
+  MonitorElement* rpcHitPhi[12];
+  MonitorElement* rpcHitTheta[12];
+  MonitorElement* rpcChamberPhi[12];
+  MonitorElement* rpcChamberTheta[12];
+
+//Quality Tests
+  MonitorElement* cscChamberStrip_QT[20]; //have to reallocate for two additional histograms
+  MonitorElement* cscChamberStrip_QT_hot[20];
+  MonitorElement* cscChamberStrip_QT_dead[20];
+
+  MonitorElement* emtfTrackBX_QT;
+  MonitorElement* emtfTrackBX_QT_hot;
+  MonitorElement* emtfTrackBX_QT_dead;
+
+  MonitorElement* emtfTrackPhi_QT;
+  MonitorElement* emtfTrackPhi_QT_hot;
+  MonitorElement* emtfTrackPhi_QT_dead;
 };
 
 #endif

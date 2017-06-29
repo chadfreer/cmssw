@@ -87,7 +87,11 @@ XMLIdealGeometryESSource = cms.ESSource("XMLIdealGeometryESSource",
         'Geometry/ForwardCommonData/data/cmszdc.xml',
     )+
     cms.vstring(
+<<<<<<< HEAD
         'Geometry/MuonCommonData/data/muonNumbering/TDR_BaseLine/muonNumbering.xml',
+=======
+        'Geometry/MuonCommonData/data/PhaseII/muonNumbering.xml',
+>>>>>>> chadfreer/EMTF_QT
         'Geometry/EcalSimData/data/PhaseII/ecalsens.xml',
         'Geometry/HcalCommonData/data/hcalsens/HGCal/hcalsenspmf.xml',
         'Geometry/HcalSimData/data/hf.xml',
@@ -97,13 +101,13 @@ XMLIdealGeometryESSource = cms.ESSource("XMLIdealGeometryESSource",
         'Geometry/HGCalSimData/data/hgcsensv6.xml',
         'Geometry/HGCalSimData/data/hgccons.xml',
         'Geometry/HGCalSimData/data/hgcProdCuts.xml',
-        'Geometry/MuonSimData/data/PhaseII/ME0EtaPart/muonSens.xml',
+        'Geometry/MuonSimData/data/PhaseII/muonSens.xml',
         'Geometry/DTGeometryBuilder/data/dtSpecsFilter.xml',
         'Geometry/CSCGeometryBuilder/data/cscSpecsFilter.xml',
         'Geometry/CSCGeometryBuilder/data/cscSpecs.xml',
         'Geometry/RPCGeometryBuilder/data/PhaseII/RPCSpecs.xml',
-        'Geometry/GEMGeometryBuilder/data/v7/GEMSpecsFilter.xml',
-        'Geometry/GEMGeometryBuilder/data/v7/GEMSpecs.xml',
+        'Geometry/GEMGeometryBuilder/data/GEMSpecsFilter.xml',
+        'Geometry/GEMGeometryBuilder/data/v5/GEMSpecs.xml',
         'Geometry/ForwardCommonData/data/brmsens.xml',
         'Geometry/ForwardSimData/data/zdcsens.xml',
         'Geometry/HcalSimData/data/HcalProdCuts.xml',
