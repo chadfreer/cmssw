@@ -75,6 +75,8 @@ process.l1tStage2OnlineDQM.remove(process.l1tStage2uGt)
 # Stage2 Quality Tests
 process.load("DQM.L1TMonitorClient.L1TStage2MonitorClient_cff")
 process.l1tStage2MonitorClientPath = cms.Path(process.l1tStage2MonitorClient)
+process.load("DQM.L1TMonitorClient.L1TEMTFMonitorClient_cff")
+process.l1tEMTFMonitorClientPath = cms.Path(process.l1tEMTFMonitorClient)
 
 #--------------------------------------------------
 # Legacy DQM EndPath
@@ -90,6 +92,7 @@ process.schedule = cms.Schedule(
     process.rawToDigiPath,
     process.l1tMonitorPath,
     process.l1tStage2MonitorClientPath,
+    process.l1tEMTFMonitorClientPath,
 #    process.l1tMonitorEndPath,
     process.dqmEndPath
 )
