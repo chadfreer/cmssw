@@ -7,10 +7,10 @@ process = cms.Process("L1TStage2DQM", eras.Run2_2016)
 # Event Source and Condition
 
 # Live Online DQM in P5
-process.load("DQM.Integration.config.inputsource_cfi")
+#process.load("DQM.Integration.config.inputsource_cfi")
 
 # Testing in lxplus
-#process.load("DQM.Integration.config.fileinputsource_cfi")
+process.load("DQM.Integration.config.fileinputsource_cfi")
 
 # Required to load Global Tag
 process.load("DQM.Integration.config.FrontierCondition_GT_cfi") 
@@ -64,12 +64,12 @@ process.l1tMonitorPath = cms.Path(
 )
 
 # Remove DQM Modules
-#process.l1tStage2online.remove(process.l1tStage2CaloLayer1)
-#process.l1tStage2online.remove(process.l1tStage2CaloLayer2)
-#process.l1tStage2online.remove(process.l1tStage2Bmtf)
-#process.l1tStage2online.remove(process.l1tStage2Emtf)
-#process.l1tStage2online.remove(process.l1tStage2uGMT)
-#process.l1tStage2online.remove(process.l1tStage2uGt)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2CaloLayer1)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2CaloLayer2)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2Bmtf)
+#process.l1tStage2OnlineDQM.remove(process.l1tStage2Emtf)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2uGMT)
+process.l1tStage2OnlineDQM.remove(process.l1tStage2uGt)
 
 #--------------------------------------------------
 # Stage2 Quality Tests
@@ -97,6 +97,6 @@ process.schedule = cms.Schedule(
 #--------------------------------------------------
 # Process Customizations
 
-from DQM.Integration.config.online_customizations_cfi import *
-process = customise(process)
+#from DQM.Integration.config.online_customizations_cfi import *
+#process = customise(process)
 
