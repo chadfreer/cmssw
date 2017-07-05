@@ -20,7 +20,7 @@ options.register(
 )
 
 options.register('runNumber',
-                 286520,
+                 296972,
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Run number. This run number has to be present in the dataset configured with the dataset option.")
@@ -59,7 +59,7 @@ except:
   if options.dataset == 'auto':
     print "Querying DAS for a dataset..."
     import subprocess
-    out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/*Express*/*/*FEVT*'" % options.runNumber, shell=True)
+    out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/ZeroBias/Run2017A-v1/RAW'" % options.runNumber, shell=True)
     dataset = out.splitlines()[-1]
     print "Using dataset=%s." % dataset
   else:
@@ -72,6 +72,16 @@ except:
   read, sec = filesFromDASQuery("file run=%d dataset=%s" % (options.runNumber, dataset), option=" --limit 10000 ")
   readFiles.extend(read)
   secFiles.extend(sec)
+
+#import subprocess
+#eos_cmd = '/afs/cern.ch/project/eos/installation/pro/bin/eos.select'
+#in_dir_name = '/eos/cms/tier0/store/data/Run2017A/ZeroBias/RAW/v1/000/296/702/00000/'
+
+#for in_file_name in subprocess.check_output([eos_cmd, 'ls', in_dir_name]).splitlines():
+#    if not ('.root' in in_file_name): continue
+#    in_dir_name_T0 = in_dir_name.replace('/eos/cms/tier0/', 'root://eoscms.cern.ch//')
+#    print in_dir_name_T0 + in_file_name
+#    readFiles.extend( cms.untracked.vstring(in_dir_name_T0+in_file_name) )
 
 print "Got %d files." % len(readFiles)
 
@@ -89,7 +99,7 @@ print "Selected %d files and %d LS." % (len(readFiles), len(lumirange))
 
 source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles, lumisToProcess = lumirange)
 maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(50000)
 )
 
 # Fix to allow scram to compile
