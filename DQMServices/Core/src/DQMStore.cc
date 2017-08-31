@@ -609,7 +609,6 @@ DQMStore::initializeFrom(const edm::ParameterSet& pset) {
   }
 
   initQCriterion<Comp2RefChi2>(qalgos_);
-  initQCriterion<Comp2Ref2DChi2>(qalgos_);
   initQCriterion<Comp2RefKolmogorov>(qalgos_);
   initQCriterion<ContentsXRange>(qalgos_);
   initQCriterion<ContentsYRange>(qalgos_);
@@ -617,6 +616,7 @@ DQMStore::initializeFrom(const edm::ParameterSet& pset) {
   initQCriterion<Comp2RefEqualH>(qalgos_);
   initQCriterion<DeadChannel>(qalgos_);
   initQCriterion<NoisyChannel>(qalgos_);
+  initQCriterion<ContentSigma>(qalgos_);
   initQCriterion<ContentsWithinExpected>(qalgos_);
   initQCriterion<CompareToMedian>(qalgos_);
   initQCriterion<CompareLastFilledBin>(qalgos_);
