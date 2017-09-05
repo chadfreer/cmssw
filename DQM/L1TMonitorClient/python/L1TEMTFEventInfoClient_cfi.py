@@ -96,126 +96,126 @@ l1tEMTFEventInfoClient = cms.EDProducer("L1TEMTFEventInfoClient", #figure out wh
     NoisyStrip = cms.VPSet(
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string("ChamberStrip_Noisy"), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_224"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_224"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(NoisyLabel = cms.string(" "), NoisyDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Noisy"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                     ),  ## End HitObjects = cms.VPSet(
     DeadStrip = cms.VPSet(
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_224"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMENeg11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11a"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_224"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos11b"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos12"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_128"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos13"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos21"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos22"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos31"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos32"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos41"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                   	cms.PSet(DeadLabel = cms.string(" "), DeadDisable  = cms.uint32(0),
                         QualityTests = cms.VPSet(
-                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead_160"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
+                            cms.PSet(QualityTestName = cms.string("ContentSigma_Dead"), QualityTestHist = cms.string("L1T/L1TStage2EMTF/CSCInput/cscChamberStripMEPos42"), QualityTestSummaryEnabled = cms.uint32(1) ) ) ),
                     ),  ## End HitObjects = cms.VPSet(
     #
     # fast over-mask a system: if the name of the system is in the list, the system will be masked

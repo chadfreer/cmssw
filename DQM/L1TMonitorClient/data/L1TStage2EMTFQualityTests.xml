@@ -17,8 +17,8 @@
 		<PARAM name="numNeighborsY">10</PARAM>
 		<PARAM name="noisy">1</PARAM>
 		<PARAM name="dead">0</PARAM>
-		<PARAM name="error">0.60</PARAM>
-		<PARAM name="warning">0.80</PARAM> 
+		<PARAM name="error">0.94</PARAM>
+		<PARAM name="warning">0.97</PARAM> 
 		<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
 		<PARAM name="xMax">0</PARAM>
 		<PARAM name="yMin">0</PARAM>
@@ -33,8 +33,8 @@
 		<PARAM name="numNeighborsY">10</PARAM>
 		<PARAM name="noisy">0</PARAM>
 		<PARAM name="dead">1</PARAM>
-		<PARAM name="error">0.60</PARAM>
-		<PARAM name="warning">0.80</PARAM>
+		<PARAM name="error">0.94</PARAM>
+		<PARAM name="warning">0.97</PARAM>
 		<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
 		<PARAM name="xMax">0</PARAM>
 		<PARAM name="yMin">0</PARAM>
@@ -73,106 +73,6 @@
 		<PARAM name="yMin">4</PARAM>
 		<PARAM name="yMax">4</PARAM> 
     </QTEST>
-
-    <!-- tests to iterate over histogram from y=1 to y=128 -->
-    <QTEST name="ContentSigma_Noisy_128">
-		<TYPE>ContentSigma</TYPE>	
-		<PARAM name="toleranceNoisy">3</PARAM>
-		<PARAM name="toleranceDead">1</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>		
-		<PARAM name="numNeighborsY">10</PARAM>
-		<PARAM name="noisy">1</PARAM>
-		<PARAM name="dead">0</PARAM>
-		<PARAM name="error">0.80</PARAM>
-		<PARAM name="warning">0.99</PARAM>
-		<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
-		<PARAM name="xMax">0</PARAM>
-		<PARAM name="yMin">1</PARAM>
-		<PARAM name="yMax">128</PARAM> 
-    </QTEST> 
-
-    <QTEST name="ContentSigma_Dead_128">
-		<TYPE>ContentSigma</TYPE>	
-		<PARAM name="toleranceNoisy">1</PARAM>
-		<PARAM name="toleranceDead">3</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>
-		<PARAM name="numNeighborsY">10</PARAM>
-		<PARAM name="noisy">0</PARAM>
-		<PARAM name="dead">1</PARAM>
-		<PARAM name="error">0.80</PARAM>
-		<PARAM name="warning">0.99</PARAM>
-		<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
-		<PARAM name="xMax">0</PARAM>
-		<PARAM name="yMin">1</PARAM>
-		<PARAM name="yMax">128</PARAM> 
-    </QTEST> 
-
-   <!-- tests to iterate over histogram from y=1 to y=160 -->
-    <QTEST name="ContentSigma_Noisy_160">
-		<TYPE>ContentSigma</TYPE>	
-		<PARAM name="toleranceNoisy">3</PARAM>
-		<PARAM name="toleranceDead">1</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>		
-		<PARAM name="numNeighborsY">10</PARAM>
-		<PARAM name="noisy">1</PARAM>
-		<PARAM name="dead">0</PARAM>
-		<PARAM name="error">0.80</PARAM>
-		<PARAM name="warning">0.99</PARAM>
-		<PARAM name="xMin">0</PARAM> 
-		<PARAM name="xMax">0</PARAM>
-		<PARAM name="yMin">1</PARAM>
-		<PARAM name="yMax">160</PARAM> 
-    </QTEST> 
-
-    <QTEST name="ContentSigma_Dead_160">
-		<TYPE>ContentSigma</TYPE>	
-		<PARAM name="toleranceNoisy">1</PARAM>
-		<PARAM name="toleranceDead">3</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>
-		<PARAM name="numNeighborsY">10</PARAM>
-		<PARAM name="noisy">0</PARAM>
-		<PARAM name="dead">1</PARAM>
-		<PARAM name="error">0.80</PARAM>
-		<PARAM name="warning">0.99</PARAM> 
-		<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
-		<PARAM name="xMax">0</PARAM>
-		<PARAM name="yMin">1</PARAM>
-		<PARAM name="yMax">160</PARAM> 
-    </QTEST> 
-
-   <!-- tests to iterate over histogram from y=129 to y=224 -->
-    <QTEST name="ContentSigma_Noisy_224">
-		<TYPE>ContentSigma</TYPE>	
-		<PARAM name="toleranceNoisy">3</PARAM>
-		<PARAM name="toleranceDead">1</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>		
-		<PARAM name="numNeighborsY">10</PARAM>
-		<PARAM name="noisy">1</PARAM>
-		<PARAM name="dead">0</PARAM>
-		<PARAM name="error">0.80</PARAM>
-		<PARAM name="warning">0.99</PARAM>
-		<PARAM name="xMin">0</PARAM> 
-		<PARAM name="xMax">0</PARAM>
-		<PARAM name="yMin">129</PARAM>
-		<PARAM name="yMax">224</PARAM> 
-    </QTEST> 
-
-    <QTEST name="ContentSigma_Dead_224">
-		<TYPE>ContentSigma</TYPE>	
-		<PARAM name="toleranceNoisy">1</PARAM>
-		<PARAM name="toleranceDead">3</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>
-		<PARAM name="numNeighborsY">10</PARAM>
-		<PARAM name="noisy">0</PARAM>
-		<PARAM name="dead">1</PARAM>
-		<PARAM name="error">0.80</PARAM>
-		<PARAM name="warning">0.99</PARAM>
-		<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
-		<PARAM name="xMax">0</PARAM>
-		<PARAM name="yMin">129</PARAM>
-		<PARAM name="yMax">224</PARAM> 
-    </QTEST> 
-
 
   <!-- EMTF Hit Occupancy -->
 
@@ -219,12 +119,8 @@
     </LINK> 
 
     <LINK name="*cscChamberStrip*">
-        	<TestName activate="true">ContentSigma_Noisy_128</TestName> 
-        	<TestName activate="true">ContentSigma_Dead_128</TestName>
-        	<TestName activate="true">ContentSigma_Noisy_160</TestName> 
-        	<TestName activate="true">ContentSigma_Dead_160</TestName>
-        	<TestName activate="true">ContentSigma_Noisy_224</TestName> 
-        	<TestName activate="true">ContentSigma_Dead_224</TestName>
+        	<TestName activate="true">ContentSigma_Noisy</TestName> 
+        	<TestName activate="true">ContentSigma_Dead</TestName>
     </LINK> 
 
     <LINK name="*emtfTrackBX">
