@@ -92,10 +92,11 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
     rpcHitBX->setBinLabel(13 - ybin, "RE+" + rpc_label[ybin - 1], 2);
   }
   
-  rpcHitOccupancy = ibooker.book2D("rpcHitOccupancy", "RPC Chamber Occupancy", 36, 1, 37, 12, 0, 12);
+  rpcHitOccupancy = ibooker.book2D("rpcHitOccupancy", "RPC Chamber Occupancy", 42, 1, 43, 12, 0, 12);
   rpcHitOccupancy->setAxisTitle("Sector", 1);
   for (int bin = 1; bin < 7; ++bin) {
-    rpcHitOccupancy->setBinLabel(bin*6 - 5, std::to_string(bin), 1);
+    rpcHitOccupancy->setBinLabel(bin*7 - 6, std::to_string(bin), 1);
+    rpcHitOccupancy->setBinLabel(bin*7, "N", 1);
     rpcHitOccupancy->setBinLabel(bin, "RE-" + rpc_label[bin - 1], 2);
     rpcHitOccupancy->setBinLabel(13 - bin, "RE+" + rpc_label[bin - 1],2);
   }  
@@ -169,11 +170,19 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
       label = "ME+" + suffix_label[9 - i];
     }
 
-    if (hist < 6 || hist > 13) {
+    //if (hist < 6 || hist > 13) {
+    //  nChambs = (i % 2) ? 18 : 36;
+    //} else {
+    //  nChambs = 36;
+    //}
+    if (hist < 6){
       nChambs = (i % 2) ? 18 : 36;
+    } else if (hist >13){
+      nChambs = (i % 2) ? 36 : 18;
     } else {
       nChambs = 36;
     }
+
     
     const std::array<int, 10> wiregroups{{64, 96, 64, 96, 64, 112, 32, 64, 48, 48}};
     const std::array<int, 10> halfstrips{{160, 160, 160, 160, 160, 160, 128, 160, 128, 96}};
@@ -452,9 +461,11 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
         rpcHitTheta[hist_index]->Fill(Hit->Theta_fp() / 4);
         rpcChamberPhi[hist_index]->Fill(chamber, Hit->Phi_fp() / 4);
         rpcChamberTheta[hist_index]->Fill(chamber, Hit->Theta_fp() / 4);
-        rpcHitOccupancy->Fill((Hit->Sector_RPC() - 1) * 6 + Hit->Subsector(), hist_index + 0.5);
-      }
-    }
+        rpcHitOccupancy->Fill((Hit->Sector_RPC() - 1) * 7 + Hit->Subsector(), hist_index + 0.5);
+      } else if (Hit->Neighbor() == true) {
+ 	rpcHitOccupancy->Fill((Hit->Sector_RPC() - 1) * 7 + 7, hist_index + 0.5);
+      }	 
+   }
   }
 
   // Tracks
