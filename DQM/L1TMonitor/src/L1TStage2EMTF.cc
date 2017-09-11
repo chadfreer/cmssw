@@ -59,7 +59,22 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
   for (unsigned int ybin = 0; ybin < binNames.size(); ++ybin) {
     cscLCTOccupancy->setBinLabel(ybin+1, binNames[ybin], 2);
   }
-  
+
+  //cscOccupancy designed to match the cscDQM plot  
+  cscDQMOccupancy = ibooker.book2D("cscDQMOccupancy", "CSC Chamber Occupancy", 42, 1, 43, 20, 0, 20);
+  cscDQMOccupancy->setAxisTitle("Chamber", 1);
+  for (int sect = 1; sect < 7; ++sect) {
+     for (int xbin = 1; xbin < 7; ++xbin) {
+       cscDQMOccupancy->setBinLabel(6*(sect-1)+xbin+(sect-1), std::to_string(6*(sect-1)+xbin), 1);
+       cscDQMOccupancy->setBinLabel(7*sect, "N", 1);
+     }
+  }
+  for (int ybin = 1; ybin <= 10; ++ybin) {
+    cscDQMOccupancy->setBinLabel(ybin, "ME-" + suffix_label[ybin - 1], 2);
+    cscDQMOccupancy->setBinLabel(21 - ybin, "ME+" + suffix_label[ybin - 1], 2);
+  }
+
+
   mpcLinkErrors = ibooker.book2D("mpcLinkErrors", "MPC Link Errors", 54, 1, 55, 12, -6, 6);
   mpcLinkErrors->setAxisTitle("Sector (CSCID 1-9 Unlabelled)", 1);
   for (int xbin = 1; xbin < 7; ++xbin) {
@@ -428,12 +443,14 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
     
     int hist_index = 0;
     if (ring == 4 && strip >= 128) strip -= 128;
+
     
     if (Hit->Is_CSC() == true) {
       hist_index = histIndexCSC.at( {station, ring} );
       if (endcap > 0) hist_index = 19 - hist_index;
       cscLCTBX->Fill(Hit->BX(), hist_index);
       if (Hit->Neighbor() == false) {
+        cscDQMOccupancy->Fill(chamber+sector-,hist_index);
         cscLCTStrip[hist_index]->Fill(strip);
         cscLCTWire[hist_index]->Fill(wire);
         cscChamberStrip[hist_index]->Fill(chamber, strip);
