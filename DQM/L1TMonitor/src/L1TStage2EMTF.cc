@@ -63,17 +63,19 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
   //cscOccupancy designed to match the cscDQM plot  
   cscDQMOccupancy = ibooker.book2D("cscDQMOccupancy", "CSC Chamber Occupancy", 42, 1, 43, 20, 0, 20);
   cscDQMOccupancy->setAxisTitle("Chamber", 1);
-  for (int sect = 1; sect < 7; ++sect) {
-     for (int xbin = 1; xbin < 7; ++xbin) {
-       cscDQMOccupancy->setBinLabel(6*(sect-1)+xbin+(sect-1), std::to_string(6*(sect-1)+xbin), 1);
-       cscDQMOccupancy->setBinLabel(7*sect, "N", 1);
-     }
+  int count=0;
+  for (int xbin=1; xbin < 43; ++xbin){
+  cscDQMOccupancy->setBinLabel(xbin, std::to_string(xbin-count), 1);
+    if (xbin==2 || xbin==9 || xbin==16 || xbin==23 || xbin==30 ||xbin==37 ){
+       ++xbin;
+       ++count;
+       cscDQMOccupancy->setBinLabel(xbin, "N", 1);
+    }
   }
   for (int ybin = 1; ybin <= 10; ++ybin) {
     cscDQMOccupancy->setBinLabel(ybin, "ME-" + suffix_label[ybin - 1], 2);
     cscDQMOccupancy->setBinLabel(21 - ybin, "ME+" + suffix_label[ybin - 1], 2);
   }
-
 
   mpcLinkErrors = ibooker.book2D("mpcLinkErrors", "MPC Link Errors", 54, 1, 55, 12, -6, 6);
   mpcLinkErrors->setAxisTitle("Sector (CSCID 1-9 Unlabelled)", 1);
@@ -450,7 +452,40 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
       if (endcap > 0) hist_index = 19 - hist_index;
       cscLCTBX->Fill(Hit->BX(), hist_index);
       if (Hit->Neighbor() == false) {
-        cscDQMOccupancy->Fill(chamber+sector-,hist_index);
+        //Map for cscDQMOccupancy plot
+        if (station>1 && (ring % 2)==1){
+           if (chamber<2){
+           cscDQMOccupancy->Fill(chamber*2,hist_index);
+           }if (chamber>1 && chamber<5){
+           cscDQMOccupancy->Fill(chamber*2+1,hist_index);
+           }if (chamber>4 && chamber<8){
+           cscDQMOccupancy->Fill(chamber*2+2,hist_index);
+           }if (chamber>7 && chamber<11){
+           cscDQMOccupancy->Fill(chamber*2+3,hist_index);
+           }if (chamber>10 && chamber<14){
+           cscDQMOccupancy->Fill(chamber*2+4,hist_index);
+           }if (chamber>13 && chamber<17){
+           cscDQMOccupancy->Fill(chamber*2+5,hist_index);
+           }if (chamber>16){
+           cscDQMOccupancy->Fill(chamber*2+6,hist_index);
+           }
+        }else {
+           if (chamber<3){
+           cscDQMOccupancy->Fill(chamber,hist_index);
+           }if (chamber>2 && chamber<9){
+           cscDQMOccupancy->Fill(chamber+1,hist_index);
+           }if (chamber>8 && chamber<15){
+           cscDQMOccupancy->Fill(chamber+2,hist_index);
+           }if (chamber>14 && chamber<21){
+           cscDQMOccupancy->Fill(chamber+3,hist_index);
+           }if (chamber>20 && chamber<27){
+           cscDQMOccupancy->Fill(chamber+4,hist_index);
+           }if (chamber>26 && chamber<33){
+           cscDQMOccupancy->Fill(chamber+5,hist_index);       
+           }if (chamber>32){
+           cscDQMOccupancy->Fill(chamber+6,hist_index);
+           }
+        }
         cscLCTStrip[hist_index]->Fill(strip);
         cscLCTWire[hist_index]->Fill(wire);
         cscChamberStrip[hist_index]->Fill(chamber, strip);
@@ -464,7 +499,9 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	// Map neighbor chambers to "fake" CSC IDs: 1/3 --> 1, 1/6 --> 2, 1/9 --> 3, 2/3 --> 4, 2/9 --> 5, etc.
 	int cscid_n = (station == 1 ? (cscid / 3) : (station * 2) + ((cscid - 3) / 6) );
         cscLCTOccupancy->Fill(cscid_n + cscid_offset, endcap * 5.5);
-      }
+      } if (Hit->Neighbor() == true) {
+           cscDQMOccupancy->Fill(sector*7-4,hist_index);
+      }  
     }
    
     if (Hit->Is_RPC() == true) {
