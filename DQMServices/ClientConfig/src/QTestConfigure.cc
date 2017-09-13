@@ -212,6 +212,8 @@ void QTestConfigure::EnableContentSigmaTest(std::string testName,
     qc1 = bei->getQCriterion(testName);
   }
   ContentSigma * me_qc1  = (ContentSigma *) qc1;
+  unsigned int Xblocks = (unsigned int) atof(findOrDefault(params, "Xblocks", "0"));
+  unsigned int Yblocks = (unsigned int) atof(findOrDefault(params, "Yblocks", "0"));
   unsigned int neighborsX = (unsigned int) atof(findOrDefault(params, "neighboursX", "0"));
   unsigned int neighborsY = (unsigned int) atof(findOrDefault(params, "neighboursY", "0"));
   double toleranceNoisy = atof(findOrDefault(params, "toleranceNoisy", "0"));
@@ -224,6 +226,8 @@ void QTestConfigure::EnableContentSigmaTest(std::string testName,
   unsigned int yMax = (unsigned int) atof(findOrDefault(params, "yMax", "500")); 
   double warning = atof(findOrDefault(params, "warning", "0"));
   double error = atof(findOrDefault(params, "error", "0"));
+  me_qc1->setNumXblocks (Xblocks);
+  me_qc1->setNumYblocks (Yblocks);
   me_qc1->setNumNeighborsX (neighborsX);
   me_qc1->setNumNeighborsY (neighborsY);
   me_qc1->setToleranceNoisy (toleranceNoisy);

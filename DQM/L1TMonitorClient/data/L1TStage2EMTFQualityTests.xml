@@ -13,6 +13,8 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">3</PARAM>
 		<PARAM name="toleranceDead">1</PARAM>
+                <PARAM name="numXblocks">999</PARAM>
+                <PARAM name="numYblocks">999</PARAM>
 		<PARAM name="numNeighborsX">10</PARAM>		
 		<PARAM name="numNeighborsY">10</PARAM>
 		<PARAM name="noisy">1</PARAM>
@@ -29,6 +31,8 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">1</PARAM>
 		<PARAM name="toleranceDead">3</PARAM>
+                <PARAM name="numXblocks">999</PARAM>
+                <PARAM name="numYblocks">999</PARAM>
 		<PARAM name="numNeighborsX">10</PARAM>
 		<PARAM name="numNeighborsY">10</PARAM>
 		<PARAM name="noisy">0</PARAM>
@@ -46,6 +50,8 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">3</PARAM>
 		<PARAM name="toleranceDead">1</PARAM>
+                <PARAM name="numXblocks">999</PARAM>
+                <PARAM name="numYblocks">999</PARAM>
 		<PARAM name="numNeighborsX">10</PARAM>		
 		<PARAM name="numNeighborsY">10</PARAM>
 		<PARAM name="noisy">1</PARAM>
@@ -62,6 +68,8 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">1</PARAM>
 		<PARAM name="toleranceDead">3</PARAM>
+                <PARAM name="numXblocks">999</PARAM>
+                <PARAM name="numYblocks">999</PARAM>
 		<PARAM name="numNeighborsX">10</PARAM>
 		<PARAM name="numNeighborsY">10</PARAM>
 		<PARAM name="noisy">0</PARAM>

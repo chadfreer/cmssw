@@ -355,6 +355,8 @@ public:
   ContentSigma(const std::string &name) : SimpleTest(name,true)
   {
     rangeInitialized_ = false;
+    numXblocks_ = 1;
+    numYblocks_ = 1;
     numNeighborsX_ = 1;
     numNeighborsY_ = 1;
     setAlgoName(getAlgoName());
@@ -369,6 +371,8 @@ public:
   /// Will use rollover when bin+i or bin-i is beyond histogram limits (e.g.
   /// for histogram with N bins, bin N+1 corresponds to bin 1,
   /// and bin -1 corresponds to bin N)
+  void setNumXblocks(unsigned ncx) { if (ncx > 0) numXblocks_ = ncx; }
+  void setNumYblocks(unsigned ncy) { if (ncy > 0) numYblocks_ = ncy; }
   void setNumNeighborsX(unsigned ncx) { if (ncx > 0) numNeighborsX_ = ncx; }
   void setNumNeighborsY(unsigned ncy) { if (ncy > 0) numNeighborsY_ = ncy; }
 
@@ -413,11 +417,13 @@ public:
 
 protected:
   /// for each bin get sum of the surrounding neighbors
-  double getNeighborSum(int binX, int binY, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
+  double getNeighborSum(int binX, int binY, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
 
   bool noisy_; bool dead_;   /*< declare if test will be checking for noisy channels, dead channels, or both */
   float toleranceNoisy_;        /*< factor by which sigma is compared for noisy channels */
   float toleranceDead_;        /*< factor by which sigma is compared for dead channels*/
+  unsigned numXblocks_;
+  unsigned numYblocks_;
   unsigned numNeighborsX_;  /*< # of neighboring channels along x-axis for calculating average to be used
 			     for comparison with channel under consideration */
   unsigned numNeighborsY_;  /*< # of neighboring channels along y-axis for calculating average to be used

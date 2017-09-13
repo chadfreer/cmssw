@@ -4,6 +4,8 @@
 	<TYPE>ContentSigma</TYPE>	
 	<PARAM name="toleranceNoisy">1</PARAM>
 	<PARAM name="toleranceDead">1</PARAM>
+	<PARAM name="Xblocks">1</PARAM>
+        <PARAM name="Yblocks">1</PARAM>
 	<PARAM name="neighboursX">1</PARAM>
 	<PARAM name="neighboursY">1</PARAM>
 	<PARAM name="noisy">1</PARAM>

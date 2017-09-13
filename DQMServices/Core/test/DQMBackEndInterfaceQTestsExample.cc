@@ -172,6 +172,8 @@ DQMStoreQTestsExample::DQMStoreQTestsExample(const edm::ParameterSet& iConfig ) 
     contentSigma_test->setToleranceNoisy(1);
     contentSigma_test->setToleranceDead(1);
     // set # of neighboring channels for calculating average (default: 1)
+    contentSigma_test->setNumXblocks(1);
+    contentSigma_test->setNumYblocks(1);
     contentSigma_test->setNumNeighborsX(1);
     contentSigma_test->setNumNeighborsY(1);
     // declare whether to test for noisy or dead bins

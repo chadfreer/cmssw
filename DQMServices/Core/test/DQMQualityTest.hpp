@@ -69,6 +69,8 @@ class DQMQualityTest
     contentSigma_test_->setToleranceNoisy(1);
     contentSigma_test_->setToleranceDead(1);
     // set # of neighboring channels for calculating average (default: 1)
+    contentSigma_test_->setNumXblocks(1);
+    contentSigma_test_->setNumYblocks(1);
     contentSigma_test_->setNumNeighborsX(1);
     contentSigma_test_->setNumNeighborsY(1);
     // declare whether to test for noisy or dead bins

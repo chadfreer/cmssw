@@ -1027,11 +1027,15 @@ float ContentSigma::runTest(const MonitorElement *me)
   int fail = 0;   // initialize bin failure count
   //initialize minimums and maximums with expected values
   unsigned xMin = 1;
-	unsigned yMin =1;
+  unsigned yMin =1;
   unsigned xMax = nbinsX; 
   unsigned yMax = nbinsY;
+  unsigned XBlocks = numXblocks_;
+  unsigned YBlocks = numYblocks_;
   unsigned neighborsX = numNeighborsX_; 
   unsigned neighborsY = numNeighborsY_;
+  unsigned Xbinnum = 1;
+  unsigned Ybinnum =1;
 
 	if (xMin_ != 0 && xMax_ != 0) {	//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
 		// check that user's parameters are completely in agreement with histogram
@@ -1046,7 +1050,7 @@ float ContentSigma::runTest(const MonitorElement *me)
 		if ((yMax_ <= nbinsY) && (yMin_ <= yMax_)) { // rescale area of histogram being analyzed
 			nbinsY = yMax_ - yMin_ + 1;
 			yMax = yMax_;
-		  yMin = yMin_;
+		        yMin = yMin_;
 		}
 	}
 
@@ -1056,6 +1060,7 @@ float ContentSigma::runTest(const MonitorElement *me)
     }
     else { neighborsX = (nbinsX - 1)/2; } //set neighbors for no overlap
   }
+
   if (neighborsY*2 >= nbinsY) {
     if (nbinsY%2 == 0) {
       neighborsY = nbinsY/2 - 1; 
@@ -1063,19 +1068,82 @@ float ContentSigma::runTest(const MonitorElement *me)
     else { neighborsY = (nbinsY - 1)/2; }
   }
 
+  //Setting 999 prevents blocks and does quality tests by bins only
+  if (XBlocks==999){
+     XBlocks=xMax;
+  }
+  if (YBlocks==999){
+     YBlocks=yMax;
+  }
+  
+  Xbinnum = nbinsX/XBlocks;
+  Ybinnum = nbinsY/YBlocks;
+  for (unsigned groupx=0; groupx<XBlocks; ++groupx){ 
+     for (unsigned groupy=0; groupy<YBlocks; ++groupy){
+
+        double blocksum = 0;
+        for (unsigned binx=0; binx<Xbinnum; ++binx){
+           for (unsigned biny=0; biny<Ybinnum; ++biny){
+           blocksum += abs(h->GetBinContent(groupx*Xbinnum+xMin+binx,groupy*Ybinnum+yMin+biny));
+           }
+        }
+
+     double sum = getNeighborSum(groupx, groupy, XBlocks, YBlocks, neighborsX, neighborsY, h); 
+     sum -= blocksum; //remove center block to test
+     double average = sum/((2*neighborsX + 1)*(2*neighborsY + 1) - 1);
+     double avg_uncrt = average*sqrt(sum)/sum;
+
+     double probNoisy = ROOT::Math::poisson_cdf_c(blocksum - 1, average + avg_uncrt);
+     double probDead = ROOT::Math::poisson_cdf(blocksum, average - avg_uncrt);
+     double thresholdNoisy = ROOT::Math::normal_cdf_c(toleranceNoisy_);
+     double thresholdDead = ROOT::Math::normal_cdf(-1 * toleranceDead_);
+
+      int failureNoisy = 0;
+      int failureDead = 0;
+      if (average != 0){
+      		if (noisy_ && dead_) {
+                	if (blocksum > average) {
+                        	failureNoisy = probNoisy < thresholdNoisy;
+                        }else {
+                        	failureDead = probDead < thresholdDead;
+                        }
+                }else if (noisy_) {
+                        if (blocksum > average) {
+                        	failureNoisy = probNoisy < thresholdNoisy;
+                        }
+                }else if (dead_) {
+                        if (blocksum < average) {
+                        	failureDead = probDead < thresholdDead;
+                        }
+                }else { std::cout<<"No test type selected!\n"; }
+                        string histName = h->GetName();
+                        if (histName == "emtfTrackBX") {
+                        	std::printf("  For content: %f we get average: %f\n", blocksum, average);
+                                std::printf("   NOISY:: Probability: %f and Threshold: %f\n", probNoisy, thresholdNoisy);
+                                std::printf("   DEAD::  Probability: %f and Threshold: %f\n", probDead, thresholdDead);
+                                std::printf("For block: (%i,%i) we get failureNoisy: %i and failureDead: %i\n", groupx, groupy, failureNoisy, failureDead); }
+      }       
+      if (failureNoisy || failureDead) {
+      		++fail;
+                //DQMChannel chan(groupx*Xbinnum+xMin+binx, 0, 0, blocksum, h->GetBinError(groupx*Xbinnum+xMin+binx));
+                //badChannels_.push_back(chan);
+         }
+      }
+  }
+
+
+/*
   for (unsigned binY = yMin; binY <= yMax; ++binY) { //for all histogram exempting overflow bins
     for (unsigned binX = xMin; binX <= xMax; ++binX) {
       unsigned int content = abs(h->GetBinContent(binX, binY));
-      double sum = getNeighborSum(binX, binY, neighborsX, neighborsY, h);
+      double sum = getNeighborSum(binX, binY, XBlocks, YBlocks, neighborsX, neighborsY, h);
       double average = sum/((2*neighborsX + 1)*(2*neighborsY + 1) - 1);
       double avg_uncrt = average*sqrt(sum)/sum;
 			double probNoisy = ROOT::Math::poisson_cdf_c(content - 1, average + avg_uncrt);
 			double probDead = ROOT::Math::poisson_cdf(content, average - avg_uncrt);
 			double thresholdNoisy = ROOT::Math::normal_cdf_c(toleranceNoisy_);
 			double thresholdDead = ROOT::Math::normal_cdf(-1 * toleranceDead_);
-			//std::printf("Bin content: %f with sigma: %f and surrounding averge: %f\n", content, sigma, average);
-			//std::printf("X neighbors: %i and Y neighbors: %i\n", neighborsX, neighborsY);
-			//double sigma = ;
+
       int failureNoisy = 0;
       int failureDead = 0;
       if (average != 0)
@@ -1112,22 +1180,92 @@ float ContentSigma::runTest(const MonitorElement *me)
         	badChannels_.push_back(chan);
       	}
     }
-  }
+  }*/
     // return fraction of bins that passed test
-    return 1.*((nbinsX * nbinsY) - fail)/(nbinsX * nbinsY);
+    //return 1.*((nbinsX * nbinsY) - fail)/(nbinsX * nbinsY);
+    return 1.*((XBlocks*YBlocks)-fail)/(XBlocks*YBlocks);
 }
 
+
+//Gets the sum of the bins surrounding the block to be tested
+double ContentSigma::getNeighborSum(int groupx, int groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const {
+   double sum = 0;
+   unsigned nbinsX = h->GetXaxis()->GetNbins();
+   unsigned nbinsY = h->GetYaxis()->GetNbins();
+   unsigned xMin = 1;
+   unsigned yMin = 1;
+   unsigned xMax = nbinsX;
+   unsigned yMax = nbinsY;
+   unsigned Xbinnum = 1;
+   unsigned Ybinnum =1;
+
+        if (xMin_ != 0 && xMax_ != 0) {//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
+                                       // check that user's parameters are completely in agreement with histogram
+                                       // for instance, if inputted xMax is out of range xMin will automatically be ignored
+           if ((xMax_ <= nbinsX) && (xMin_ <= xMax_)) {
+              nbinsX = xMax_ - xMin_ + 1;
+              xMax = xMax_;            // do NOT use overflow bin
+              xMin = xMin_;            // do NOT use underflow bin
+           }
+        }
+        if (yMin_ != 0 && yMax_ != 0) {
+           if ((yMax_ <= nbinsY) && (yMin_ <= yMax_)) {
+              nbinsY = yMax_ - yMin_ + 1;
+              yMax = yMax_;
+              yMin = yMin_;
+           }
+        }
+
+    if (Xblocks==999){
+       Xblocks=xMax;
+    }
+    if (Yblocks==999){
+       Yblocks=yMax;
+    }
+    Xbinnum = nbinsX/Xblocks;
+    Ybinnum = nbinsY/Yblocks;
+    //Now we weill define the neighbor blocks edges to be summed
+    unsigned xLow,xHi,yLow,yHi;
+    xLow=(groupx-neighborsX)*Xbinnum+xMin;
+    if (xLow<xMin){
+       xLow=xMin; //If the neigbor block would go outside the histogram edge, set it the edge
+    }
+    xHi=(groupx+1+neighborsX)*Xbinnum+xMin;
+    if (xHi>xMax){
+       xHi=xMax;
+    }
+    yLow=(groupy-neighborsY)*Ybinnum+yMin;
+    if (yLow<yMin){
+       yLow=yMin;
+    }
+    yHi=(groupy+1+neighborsY)*Ybinnum+yMin;
+    if (yHi>yMax){
+       yHi=yMax;
+    }
+    //now sum over all the bins
+    for (unsigned xbin=xLow; xbin==xHi; ++xbin){
+       for (unsigned ybin=yLow; ybin==yHi; ++ybin){
+       sum += h->GetBinContent(xbin,ybin);
+       }
+    }
+    return sum;
+}
+
+
+
+
+/*
 // get average for bin under consideration
-double ContentSigma::getNeighborSum(int binX, int binY, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const
+double ContentSigma::getNeighborSum(int groupx, int groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const
 {
   /// do NOT use underflow bin
   double sum = 0;
   unsigned nbinsX = h->GetXaxis()->GetNbins();
   unsigned nbinsY = h->GetYaxis()->GetNbins();
-	unsigned xMin = 1;
-	unsigned yMin = 1;
-	unsigned xMax = nbinsX;
-	unsigned yMax = nbinsY;
+  unsigned xMin = 1;
+  unsigned yMin = 1;
+  unsigned xMax = nbinsX;
+  unsigned yMax = nbinsY;
 
 	if (xMin_ != 0 && xMax_ != 0) {	//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
 		// check that user's parameters are completely in agreement with histogram
@@ -1183,7 +1321,7 @@ double ContentSigma::getNeighborSum(int binX, int binY, unsigned neighborsX, uns
   } 
   return sum;
 }
-
+*/
 //-----------------------------------------------------------//
 //----------------  ContentsWithinExpected ---------------------//
 //-----------------------------------------------------------//
