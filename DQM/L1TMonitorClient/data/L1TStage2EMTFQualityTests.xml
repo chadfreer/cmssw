@@ -13,10 +13,10 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">3</PARAM>
 		<PARAM name="toleranceDead">1</PARAM>
-                <PARAM name="numXblocks">999</PARAM>
-                <PARAM name="numYblocks">999</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>		
-		<PARAM name="numNeighborsY">10</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">999</PARAM>
+		<PARAM name="neighboursX">10</PARAM>		
+		<PARAM name="neighboursY">10</PARAM>
 		<PARAM name="noisy">1</PARAM>
 		<PARAM name="dead">0</PARAM>
 		<PARAM name="error">0.94</PARAM>
@@ -31,10 +31,10 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">1</PARAM>
 		<PARAM name="toleranceDead">3</PARAM>
-                <PARAM name="numXblocks">999</PARAM>
-                <PARAM name="numYblocks">999</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>
-		<PARAM name="numNeighborsY">10</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">999</PARAM>
+		<PARAM name="neighboursX">10</PARAM>
+		<PARAM name="neighboursY">10</PARAM>
 		<PARAM name="noisy">0</PARAM>
 		<PARAM name="dead">1</PARAM>
 		<PARAM name="error">0.94</PARAM>
@@ -45,15 +45,89 @@
 		<PARAM name="yMax">0</PARAM> 
     </QTEST> 
 
+    <!-- tests to iterate over entire histogram -->
+    <QTEST name="CFEB_Noisy">
+                <TYPE>ContentSigma</TYPE>
+                <PARAM name="toleranceNoisy">3</PARAM>
+                <PARAM name="toleranceDead">1</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">5</PARAM>
+                <PARAM name="neighboursX">5</PARAM>
+                <PARAM name="neighboursY">2</PARAM>
+                <PARAM name="noisy">1</PARAM>
+                <PARAM name="dead">0</PARAM>
+                <PARAM name="error">0.94</PARAM>
+                <PARAM name="warning">0.975</PARAM>
+                <PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
+                <PARAM name="xMax">0</PARAM>
+                <PARAM name="yMin">0</PARAM>
+                <PARAM name="yMax">0</PARAM>
+    </QTEST>
+
+    <QTEST name="CFEB_Dead">
+                <TYPE>ContentSigma</TYPE>
+                <PARAM name="toleranceNoisy">1</PARAM>
+                <PARAM name="toleranceDead">3</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">5</PARAM>
+                <PARAM name="neighboursX">5</PARAM>
+                <PARAM name="neighboursY">2</PARAM>
+                <PARAM name="noisy">0</PARAM>
+                <PARAM name="dead">1</PARAM>
+                <PARAM name="error">0.94</PARAM>
+                <PARAM name="warning">0.975</PARAM>
+                <PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
+                <PARAM name="xMax">0</PARAM>
+                <PARAM name="yMin">0</PARAM>
+                <PARAM name="yMax">0</PARAM>
+    </QTEST>
+
+    <!-- tests to iterate over entire histogram -->
+    <QTEST name="Strip_Chamber_Noisy">
+                <TYPE>ContentSigma</TYPE>
+                <PARAM name="toleranceNoisy">3</PARAM>
+                <PARAM name="toleranceDead">1</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">1</PARAM>
+                <PARAM name="neighboursX">5</PARAM>
+                <PARAM name="neighboursY">0</PARAM>
+                <PARAM name="noisy">1</PARAM>
+                <PARAM name="dead">0</PARAM>
+                <PARAM name="error">0.94</PARAM>
+                <PARAM name="warning">0.975</PARAM>
+                <PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
+                <PARAM name="xMax">0</PARAM>
+                <PARAM name="yMin">0</PARAM>
+                <PARAM name="yMax">0</PARAM>
+    </QTEST>
+
+    <QTEST name="Strip_Chamber_Dead">
+                <TYPE>ContentSigma</TYPE>
+                <PARAM name="toleranceNoisy">1</PARAM>
+                <PARAM name="toleranceDead">3</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">1</PARAM>
+                <PARAM name="neighboursX">5</PARAM>
+                <PARAM name="neighboursY">0</PARAM>
+                <PARAM name="noisy">0</PARAM>
+                <PARAM name="dead">1</PARAM>
+                <PARAM name="error">0.94</PARAM>
+                <PARAM name="warning">0.975</PARAM>
+                <PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
+                <PARAM name="xMax">0</PARAM>
+                <PARAM name="yMin">0</PARAM>
+                <PARAM name="yMax">0</PARAM>
+    </QTEST>
+
     <!-- tests to iterate over entire histogram TRACK BX -->
     <QTEST name="ContentSigma_Noisy_TrackBX">
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">3</PARAM>
 		<PARAM name="toleranceDead">1</PARAM>
-                <PARAM name="numXblocks">999</PARAM>
-                <PARAM name="numYblocks">999</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>		
-		<PARAM name="numNeighborsY">10</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">999</PARAM>
+		<PARAM name="neighboursX">10</PARAM>		
+		<PARAM name="neighboursY">10</PARAM>
 		<PARAM name="noisy">1</PARAM>
 		<PARAM name="dead">0</PARAM>
 		<PARAM name="error">0.60</PARAM>
@@ -68,10 +142,10 @@
 		<TYPE>ContentSigma</TYPE>	
 		<PARAM name="toleranceNoisy">1</PARAM>
 		<PARAM name="toleranceDead">3</PARAM>
-                <PARAM name="numXblocks">999</PARAM>
-                <PARAM name="numYblocks">999</PARAM>
-		<PARAM name="numNeighborsX">10</PARAM>
-		<PARAM name="numNeighborsY">10</PARAM>
+                <PARAM name="Xblocks">999</PARAM>
+                <PARAM name="Yblocks">999</PARAM>
+		<PARAM name="neighboursX">10</PARAM>
+		<PARAM name="neighboursY">10</PARAM>
 		<PARAM name="noisy">0</PARAM>
 		<PARAM name="dead">1</PARAM>
 		<PARAM name="error">0.60</PARAM>
@@ -129,6 +203,10 @@
     <LINK name="*cscChamberStrip*">
         	<TestName activate="true">ContentSigma_Noisy</TestName> 
         	<TestName activate="true">ContentSigma_Dead</TestName>
+                <TestName activate="true">CFEB_Noisy</TestName>
+                <TestName activate="true">CFEB_Dead</TestName>
+                <TestName activate="true">Strip_Chamber_Noisy</TestName>
+                <TestName activate="true">Strip_Chamber_Dead</TestName>
     </LINK> 
 
     <LINK name="*emtfTrackBX">

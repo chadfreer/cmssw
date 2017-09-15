@@ -417,7 +417,8 @@ public:
 
 protected:
   /// for each bin get sum of the surrounding neighbors
-  double getNeighborSum(int binX, int binY, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
+ // double getNeighborSum(int binX, int binY, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
+  double getNeighborSum(unsigned groupx, unsigned groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
 
   bool noisy_; bool dead_;   /*< declare if test will be checking for noisy channels, dead channels, or both */
   float toleranceNoisy_;        /*< factor by which sigma is compared for noisy channels */
