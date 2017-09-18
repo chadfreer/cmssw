@@ -90,7 +90,7 @@
                 <PARAM name="Xblocks">999</PARAM>
                 <PARAM name="Yblocks">1</PARAM>
                 <PARAM name="neighboursX">5</PARAM>
-                <PARAM name="neighboursY">0</PARAM>
+                <PARAM name="neighboursY">999</PARAM>
                 <PARAM name="noisy">1</PARAM>
                 <PARAM name="dead">0</PARAM>
                 <PARAM name="error">0.94</PARAM>
@@ -108,7 +108,7 @@
                 <PARAM name="Xblocks">999</PARAM>
                 <PARAM name="Yblocks">1</PARAM>
                 <PARAM name="neighboursX">5</PARAM>
-                <PARAM name="neighboursY">0</PARAM>
+                <PARAM name="neighboursY">999</PARAM>
                 <PARAM name="noisy">0</PARAM>
                 <PARAM name="dead">1</PARAM>
                 <PARAM name="error">0.94</PARAM>

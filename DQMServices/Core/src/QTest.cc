@@ -1038,6 +1038,13 @@ float ContentSigma::runTest(const MonitorElement *me)
   unsigned XWidth = 0;
   unsigned YWidth = 0;
 
+   if (neighborsX==999){
+      neighborsX=0;
+   }
+   if (neighborsY==999){
+      neighborsY=0;
+   }
+   
    if (xMin_ != 0 && xMax_ != 0) {			//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
 		                        		// check that user's parameters are completely in agreement with histogram
 		                        		// for instance, if inputted xMax is out of range xMin will automatically be ignored
@@ -1095,15 +1102,15 @@ float ContentSigma::runTest(const MonitorElement *me)
    
      if (neighborsX>groupx){				//Find correct average at the edges
         XWidth = neighborsX + groupx + 1;
-     }else if (neighborsX>(nbinsX-(groupx+1))){
-        XWidth = (nbinsX-groupx)+neighborsX;
+     }else if (neighborsX>(XBlocks-(groupx+1))){
+        XWidth = (XBlocks-groupx)+neighborsX;
      }else {
         XWidth = 2*neighborsX+1;
      }
      if (neighborsY>groupy){
         YWidth = neighborsY + groupy + 1;
-     }else if (neighborsY>(nbinsY-(groupy+1))){
-        YWidth = (nbinsY-groupy)+neighborsY;
+     }else if (neighborsY>(YBlocks-(groupy+1))){
+        YWidth = (YBlocks-groupy)+neighborsY;
      }else {
         YWidth = 2*neighborsY+1;
      }
@@ -1146,7 +1153,7 @@ float ContentSigma::runTest(const MonitorElement *me)
 
                         string histName2 = h->GetName();
                          if (histName2 == "cscChamberStripMENeg11a") {
-                                std::printf("Chad says: groupx:%i, groupy%i, %f Blocksum, %f Average\n", groupx,groupy,blocksum,average);}
+                                std::printf("Chad says: groupx:%i, groupy%i, %f Blocksum, %f SUM, %f Average, %i XWidth, %i YWidth\n", groupx,groupy,blocksum,sum,average,XWidth,YWidth);}
 
 
 
