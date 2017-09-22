@@ -7,10 +7,10 @@ process = cms.Process("L1TStage2DQM", eras.Run2_2016)
 # Event Source and Condition
 
 # Live Online DQM in P5
-process.load("DQM.Integration.config.inputsource_cfi")
+#process.load("DQM.Integration.config.inputsource_cfi")
 
 # Testing in lxplus
-#process.load("DQM.Integration.config.fileinputsource_cfi")
+process.load("DQM.Integration.config.fileinputsource_cfi")
 
 # Required to load Global Tag
 process.load("DQM.Integration.config.FrontierCondition_GT_cfi") 
@@ -76,7 +76,9 @@ process.l1tMonitorPath = cms.Path(
 # Stage2 Quality Tests
 process.load("DQM.L1TMonitorClient.L1TStage2MonitorClient_cff")
 process.l1tStage2MonitorClientPath = cms.Path(process.l1tStage2MonitorClient)
-
+process.load("DQM.L1TMonitorClient.L1TEMTFMonitorClient_cff")
+process.l1tEMTFClientsPath = cms.Path(process.l1TEMTFClients)
+process.l1tEMTFMonitorClientPath = cms.Path(process.l1tEMTFMonitorClient)
 #--------------------------------------------------
 # Legacy DQM EndPath
 # TODO: Is lumi scalers still relevant?
@@ -84,6 +86,9 @@ process.l1tStage2MonitorClientPath = cms.Path(process.l1tStage2MonitorClient)
 #process.load("DQM.L1TMonitor.L1TMonitor_cff")
 #process.l1tMonitorEndPath = cms.EndPath(process.l1tMonitorEndPathSeq)
 
+process.l1tStage2MonitorClient.remove(process.l1TStage2uGMTQualityTests)
+process.l1tStage2MonitorClient.remove(process.l1TStage2EMTFQualityTests)
+process.l1tStage2MonitorClient.remove(process.l1TStage2BMTFQualityTests)
 #--------------------------------------------------
 # Customize for other type of runs
 
@@ -107,6 +112,8 @@ process.schedule = cms.Schedule(
     process.rawToDigiPath,
     process.l1tMonitorPath,
     process.l1tStage2MonitorClientPath,
+    process.l1tEMTFMonitorClientPath,
+    process.l1tEMTFClientsPath,
 #    process.l1tMonitorEndPath,
     process.dqmEndPath
 )
