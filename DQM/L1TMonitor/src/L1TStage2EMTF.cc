@@ -451,39 +451,47 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
       hist_index = histIndexCSC.at( {station, ring} );
       if (endcap > 0) hist_index = 19 - hist_index;
       cscLCTBX->Fill(Hit->BX(), hist_index);
+      float evt_wgt = (Hit->Station() > 1 && Hit->Ring() == 1) ? 0.5 : 1.0;
       if (Hit->Neighbor() == false) {
         //Map for cscDQMOccupancy plot
         if (station>1 && (ring % 2)==1){
            if (chamber<2){
-           cscDQMOccupancy->Fill(chamber*2,hist_index);
+           cscDQMOccupancy->Fill(chamber*2,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2-1,hist_index,evt_wgt);
            }if (chamber>1 && chamber<5){
-           cscDQMOccupancy->Fill(chamber*2+1,hist_index);
+           cscDQMOccupancy->Fill(chamber*2+1,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2+1-1,hist_index,evt_wgt);
            }if (chamber>4 && chamber<8){
-           cscDQMOccupancy->Fill(chamber*2+2,hist_index);
+           cscDQMOccupancy->Fill(chamber*2+2,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2+2-1,hist_index,evt_wgt);
            }if (chamber>7 && chamber<11){
-           cscDQMOccupancy->Fill(chamber*2+3,hist_index);
+           cscDQMOccupancy->Fill(chamber*2+3,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2+3-1,hist_index,evt_wgt);
            }if (chamber>10 && chamber<14){
-           cscDQMOccupancy->Fill(chamber*2+4,hist_index);
+           cscDQMOccupancy->Fill(chamber*2+4,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2+4-1,hist_index,evt_wgt);
            }if (chamber>13 && chamber<17){
-           cscDQMOccupancy->Fill(chamber*2+5,hist_index);
+           cscDQMOccupancy->Fill(chamber*2+5,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2+5-1,hist_index,evt_wgt);
            }if (chamber>16){
-           cscDQMOccupancy->Fill(chamber*2+6,hist_index);
+           cscDQMOccupancy->Fill(chamber*2+6,hist_index,evt_wgt);
+           cscDQMOccupancy->Fill(chamber*2+6-1,hist_index,evt_wgt);
            }
         }else {
            if (chamber<3){
-           cscDQMOccupancy->Fill(chamber,hist_index);
+           cscDQMOccupancy->Fill(chamber,hist_index,evt_wgt);
            }if (chamber>2 && chamber<9){
-           cscDQMOccupancy->Fill(chamber+1,hist_index);
+           cscDQMOccupancy->Fill(chamber+1,hist_index,evt_wgt);
            }if (chamber>8 && chamber<15){
-           cscDQMOccupancy->Fill(chamber+2,hist_index);
+           cscDQMOccupancy->Fill(chamber+2,hist_index,evt_wgt);
            }if (chamber>14 && chamber<21){
-           cscDQMOccupancy->Fill(chamber+3,hist_index);
+           cscDQMOccupancy->Fill(chamber+3,hist_index,evt_wgt);
            }if (chamber>20 && chamber<27){
-           cscDQMOccupancy->Fill(chamber+4,hist_index);
+           cscDQMOccupancy->Fill(chamber+4,hist_index,evt_wgt);
            }if (chamber>26 && chamber<33){
-           cscDQMOccupancy->Fill(chamber+5,hist_index);       
+           cscDQMOccupancy->Fill(chamber+5,hist_index,evt_wgt);       
            }if (chamber>32){
-           cscDQMOccupancy->Fill(chamber+6,hist_index);
+           cscDQMOccupancy->Fill(chamber+6,hist_index,evt_wgt);
            }
         }
         cscLCTStrip[hist_index]->Fill(strip);
@@ -500,7 +508,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	int cscid_n = (station == 1 ? (cscid / 3) : (station * 2) + ((cscid - 3) / 6) );
         cscLCTOccupancy->Fill(cscid_n + cscid_offset, endcap * 5.5);
       } if (Hit->Neighbor() == true) {
-           cscDQMOccupancy->Fill(sector*7-4,hist_index);
+           cscDQMOccupancy->Fill(sector*7-4,hist_index,evt_wgt);
       }  
     }
    

@@ -85,7 +85,7 @@
     <!-- tests to iterate over entire histogram -->
     <QTEST name="Strip_Chamber_Noisy">
                 <TYPE>ContentSigma</TYPE>
-                <PARAM name="toleranceNoisy">3</PARAM>
+                <PARAM name="toleranceNoisy">5</PARAM>
                 <PARAM name="toleranceDead">1</PARAM>
                 <PARAM name="Xblocks">999</PARAM>
                 <PARAM name="Yblocks">1</PARAM>
@@ -104,7 +104,7 @@
     <QTEST name="Strip_Chamber_Dead">
                 <TYPE>ContentSigma</TYPE>
                 <PARAM name="toleranceNoisy">1</PARAM>
-                <PARAM name="toleranceDead">3</PARAM>
+                <PARAM name="toleranceDead">5</PARAM>
                 <PARAM name="Xblocks">999</PARAM>
                 <PARAM name="Yblocks">1</PARAM>
                 <PARAM name="neighboursX">5</PARAM>
