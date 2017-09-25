@@ -30,6 +30,7 @@ class L1TStage2EMTF : public DQMEDAnalyzer {
 
  private:
 
+  //int chamber_bin(int , int , int );
   edm::EDGetTokenT<l1t::EMTFDaqOutCollection> daqToken;
   edm::EDGetTokenT<l1t::EMTFHitCollection> hitToken;
   edm::EDGetTokenT<l1t::EMTFTrackCollection> trackToken;
@@ -49,7 +50,11 @@ class L1TStage2EMTF : public DQMEDAnalyzer {
   MonitorElement* cscLCTOccupancy;
   MonitorElement* cscLCTTiming[5];
   MonitorElement* cscLCTTimingFrac[4];
-  
+  MonitorElement* cscDQMOccupancy; 
+  MonitorElement* cscDQMTiming[5];
+  MonitorElement* cscDQMTimingFrac[4];
+
+ 
   MonitorElement* emtfnTracks;
   MonitorElement* emtfTracknHits;
   MonitorElement* emtfTrackBX;
