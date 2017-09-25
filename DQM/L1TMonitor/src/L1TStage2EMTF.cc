@@ -62,7 +62,7 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
 
   //cscOccupancy designed to match the cscDQM plot  
   cscDQMOccupancy = ibooker.book2D("cscDQMOccupancy", "CSC Chamber Occupancy", 42, 1, 43, 20, 0, 20);
-  cscDQMOccupancy->setAxisTitle("Chamber", 1);
+  cscDQMOccupancy->setAxisTitle("10 degree Chamber", 1);
   int count=0;
   for (int xbin=1; xbin < 43; ++xbin){
   cscDQMOccupancy->setBinLabel(xbin, std::to_string(xbin-count), 1);
@@ -267,6 +267,24 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
 
   for (int hist = 0;  hist < 5; ++hist) {
 
+    count = 0;
+    cscDQMTiming[hist] = ibooker.book2D("cscDQMTiming" + nameBX[hist], "CSC Chamber Occupancy " + labelBX[hist], 42, 1, 43, 20, 0, 20);
+    cscDQMTiming[hist]->setAxisTitle("10 degree Chambers", 1);
+
+    for (int xbin=1; xbin < 43; ++xbin){
+       cscDQMTiming[hist]->setBinLabel(xbin, std::to_string(xbin-count), 1);
+       if (xbin==2 || xbin==9 || xbin==16 || xbin==23 || xbin==30 ||xbin==37 ){
+         ++xbin;
+         ++count;
+         cscDQMTiming[hist]->setBinLabel(xbin, "N", 1);
+       }
+     }
+
+     for (int ybin = 1; ybin <= 10; ++ybin) {
+        cscDQMTiming[hist]->setBinLabel(ybin, "ME-" + suffix_label[ybin - 1], 2);
+        cscDQMTiming[hist]->setBinLabel(21 - ybin, "ME+" + suffix_label[ybin - 1], 2);
+     }
+
     cscLCTTiming[hist] = ibooker.book2D("cscLCTTiming" + nameBX[hist], "CSC Chamber Occupancy " + labelBX[hist], 54, 1, 55, 12, -6, 6);
     cscLCTTiming[hist]->setAxisTitle("Sector (CSCID 1-9 Unlabelled)", 1);
     for (int xbin = 1; xbin < 7; ++xbin) {
@@ -285,7 +303,24 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
     }
   
     if (hist == 4) continue; // Don't book for BX = 0
-  
+
+    count = 0;
+    cscDQMTimingFrac[hist] = ibooker.book2D("cscDQMTimingFrac" + nameBX[hist], "CSC Chamber Occupancy " + labelBX[hist], 42, 1, 43, 20, 0, 20);
+    cscDQMTimingFrac[hist]->setAxisTitle("10 degree Chambers", 1);
+    for (int xbin=1; xbin < 43; ++xbin){
+    cscDQMTimingFrac[hist]->setBinLabel(xbin, std::to_string(xbin-count), 1);
+    if (xbin==2 || xbin==9 || xbin==16 || xbin==23 || xbin==30 ||xbin==37 ){
+          ++xbin;
+          ++count;
+          cscDQMTimingFrac[hist]->setBinLabel(xbin, "N", 1);
+        }
+    }
+    for (int ybin = 1; ybin <= 10; ++ybin) {
+       cscDQMTimingFrac[hist]->setBinLabel(ybin, "ME-" + suffix_label[ybin - 1], 2);
+       cscDQMTimingFrac[hist]->setBinLabel(21 - ybin, "ME+" + suffix_label[ybin - 1], 2);
+    }  
+
+
     cscLCTTimingFrac[hist] = ibooker.book2D("cscLCTTimingFrac" + nameBX[hist], "CSC Chamber Fraction in " + labelBX[hist], 54, 1, 55, 12, -6, 6);
     cscLCTTimingFrac[hist]->setAxisTitle("Sector (CSCID 1-9 Unlabelled)", 1);
     for (int xbin = 1; xbin < 7; ++xbin) {
@@ -361,6 +396,45 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
     emtfMuonhwQual->setBinLabel(xbin, std::to_string(xbin - 1), 1);
   }
 }
+
+//CSCOccupancy chamber mapping for neighbor inclusive plots
+int chamber_bin (int station, int ring, int chamber) {
+        int chamber_bin_index = 0;
+        if (station>1 && (ring % 2)==1){
+           if (chamber<2){
+           chamber_bin_index = chamber*2;
+           }if (chamber>1 && chamber<5){
+           chamber_bin_index = chamber*2+1;
+           }if (chamber>4 && chamber<8){
+           chamber_bin_index = chamber*2+2;
+           }if (chamber>7 && chamber<11){
+           chamber_bin_index = chamber*2+3;
+           }if (chamber>10 && chamber<14){
+           chamber_bin_index = chamber*2+4;
+           }if (chamber>13 && chamber<17){
+           chamber_bin_index = chamber*2+5;
+           }if (chamber>16){
+           chamber_bin_index = chamber*2+6;
+           }
+        }else {
+           if (chamber<3){
+           chamber_bin_index = chamber;
+           }if (chamber>2 && chamber<9){
+           chamber_bin_index = chamber+1;
+           }if (chamber>8 && chamber<15){
+           chamber_bin_index = chamber+2;
+           }if (chamber>14 && chamber<21){
+           chamber_bin_index = chamber+3;
+           }if (chamber>20 && chamber<27){
+           chamber_bin_index = chamber+4;
+           }if (chamber>26 && chamber<33){
+           chamber_bin_index = chamber+5;
+           }if (chamber>32){
+           chamber_bin_index = chamber+6;
+           }
+        } 
+    return chamber_bin_index;
+};
 
 void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 
@@ -454,46 +528,10 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
       float evt_wgt = (Hit->Station() > 1 && Hit->Ring() == 1) ? 0.5 : 1.0;
       if (Hit->Neighbor() == false) {
         //Map for cscDQMOccupancy plot
+        cscDQMOccupancy->Fill(chamber_bin(station,ring,chamber),hist_index,evt_wgt);
         if (station>1 && (ring % 2)==1){
-           if (chamber<2){
-           cscDQMOccupancy->Fill(chamber*2,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2-1,hist_index,evt_wgt);
-           }if (chamber>1 && chamber<5){
-           cscDQMOccupancy->Fill(chamber*2+1,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2+1-1,hist_index,evt_wgt);
-           }if (chamber>4 && chamber<8){
-           cscDQMOccupancy->Fill(chamber*2+2,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2+2-1,hist_index,evt_wgt);
-           }if (chamber>7 && chamber<11){
-           cscDQMOccupancy->Fill(chamber*2+3,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2+3-1,hist_index,evt_wgt);
-           }if (chamber>10 && chamber<14){
-           cscDQMOccupancy->Fill(chamber*2+4,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2+4-1,hist_index,evt_wgt);
-           }if (chamber>13 && chamber<17){
-           cscDQMOccupancy->Fill(chamber*2+5,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2+5-1,hist_index,evt_wgt);
-           }if (chamber>16){
-           cscDQMOccupancy->Fill(chamber*2+6,hist_index,evt_wgt);
-           cscDQMOccupancy->Fill(chamber*2+6-1,hist_index,evt_wgt);
-           }
-        }else {
-           if (chamber<3){
-           cscDQMOccupancy->Fill(chamber,hist_index,evt_wgt);
-           }if (chamber>2 && chamber<9){
-           cscDQMOccupancy->Fill(chamber+1,hist_index,evt_wgt);
-           }if (chamber>8 && chamber<15){
-           cscDQMOccupancy->Fill(chamber+2,hist_index,evt_wgt);
-           }if (chamber>14 && chamber<21){
-           cscDQMOccupancy->Fill(chamber+3,hist_index,evt_wgt);
-           }if (chamber>20 && chamber<27){
-           cscDQMOccupancy->Fill(chamber+4,hist_index,evt_wgt);
-           }if (chamber>26 && chamber<33){
-           cscDQMOccupancy->Fill(chamber+5,hist_index,evt_wgt);       
-           }if (chamber>32){
-           cscDQMOccupancy->Fill(chamber+6,hist_index,evt_wgt);
-           }
-        }
+           cscDQMOccupancy->Fill(chamber_bin(station,ring,chamber)-1,hist_index,evt_wgt);
+        }         
         cscLCTStrip[hist_index]->Fill(strip);
         cscLCTWire[hist_index]->Fill(wire);
         cscChamberStrip[hist_index]->Fill(chamber, strip);
@@ -537,7 +575,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
   int nTracks = TrackCollection->size();
 
   emtfnTracks->Fill(std::min(nTracks, emtfnTracks->getTH1F()->GetNbinsX() - 1));
-  
+ 
   for (auto Track = TrackCollection->begin(); Track != TrackCollection->end(); ++Track) {
     int endcap = Track->Endcap();
     int sector = Track->Sector();
@@ -574,14 +612,14 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
       if (numHits < 2 || numHits > 4) continue;
       l1t::EMTFHitCollection tmp_hits = Track->Hits();
       int numHitsInTrack_BX0 = 0;
-      unsigned int hist_index = 4 - numHits;
+      unsigned int hist_index2 = 4 - numHits;
     
       for (const auto & iTrkHit: Track->Hits()) { 
 	if (iTrkHit.Is_CSC() == true) {	  
-	  emtfTrackBXVsCSCLCT[hist_index]->Fill(iTrkHit.BX(), Track->BX());
+	  emtfTrackBXVsCSCLCT[hist_index2]->Fill(iTrkHit.BX(), Track->BX());
 	}
 	else if (iTrkHit.Is_RPC() == true) { 
-	  emtfTrackBXVsRPCHit[hist_index]->Fill(iTrkHit.BX(), Track->BX());
+	  emtfTrackBXVsRPCHit[hist_index2]->Fill(iTrkHit.BX(), Track->BX());
 	}
       }
 
@@ -607,14 +645,27 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	int chamber      = TrkHit.Chamber();
       	
 	int hist_index = 0; 
+        if (station<=4 && station>=2 && ring<=2 && ring>=1){
+        hist_index = histIndexCSC.at( {station, ring} );
+        }else if (station==1 && ring<=4 && ring>=1){
+        hist_index = histIndexCSC.at( {station, ring} );
+        }else{
+        std::printf("Chad says:\n %i Staion #\n %i Ring #\n \n \n", station,ring);
+        }
+        if (endcap > 0) hist_index = 19 - hist_index;
+        float evt_wgt = (TrkHit.Station() > 1 && TrkHit.Ring() == 1) ? 0.5 : 1.0;
 	// Maps CSC BX from -2 to 2 to monitor element cscLCTTIming
 	const std::map<int, int> histIndexBX = {{0, 4}, {-1, 0}, {1, 1}, {-2, 2}, {2, 3}};
 	if (std::abs(trackHitBX) > 2) continue; // Should never happen, but just to be safe ...
 	
 	if (TrkHit.Is_CSC() == true) {
 	  if (neighbor == false) {
+              cscDQMTiming[histIndexBX.at(trackHitBX)]->Fill(chamber_bin(station,ring,chamber),hist_index,evt_wgt);
+              if (station>1 && (ring % 2)==1){
+                 cscDQMTiming[histIndexBX.at(trackHitBX)]->Fill(chamber_bin(station,ring,chamber)-1,hist_index,evt_wgt);
+              }
 	    if (subsector == 1) {
-	      cscLCTTiming[histIndexBX.at(trackHitBX)]->Fill(cscid + cscid_offset, endcap * (station - 0.5));
+	      cscLCTTiming[histIndexBX.at(trackHitBX)]->Fill(cscid + cscid_offset, endcap * (station - 0.5));   
 	    }
 	    else {
 	      cscLCTTiming[histIndexBX.at(trackHitBX)]->Fill(cscid + cscid_offset, endcap * (station + 0.5));
@@ -624,6 +675,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	    // Map neighbor chambers to "fake" CSC IDs: 1/3 --> 1, 1/6 --> 2, 1/9 --> 3, 2/3 --> 4, 2/9 --> 5, etc.
 	    int cscid_n = (station == 1 ? (cscid / 3) : (station * 2) + ((cscid - 3) / 6) );
 	    cscLCTTiming[histIndexBX.at(trackHitBX)]->Fill(cscid_n + cscid_offset, endcap * 5.5);
+            cscDQMTiming[histIndexBX.at(trackHitBX)]->Fill(sector*7-4,hist_index,evt_wgt);
 	  }
 	
 	  // Fill RPC timing with matched CSC LCTs
@@ -667,6 +719,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
   // CSC LCT and RPC Hit Timing Efficieny
   for (int hist_index = 0; hist_index < 4; ++hist_index) {
     cscLCTTimingFrac[hist_index]->getTH2F()->Divide(cscLCTTiming[hist_index]->getTH2F(), cscLCTTiming[4]->getTH2F());
+    cscDQMTimingFrac[hist_index]->getTH2F()->Divide(cscDQMTiming[hist_index]->getTH2F(), cscDQMTiming[4]->getTH2F());
     rpcHitTimingFrac[hist_index]->getTH2F()->Divide(rpcHitTiming[hist_index]->getTH2F(), rpcHitTiming[4]->getTH2F());
   }
   

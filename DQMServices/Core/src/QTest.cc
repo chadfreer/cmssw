@@ -1152,9 +1152,9 @@ float ContentSigma::runTest(const MonitorElement *me)
       }       
 
                         string histName2 = h->GetName();
-                         if (histName2 == "cscChamberStripMENeg11a") {
-                                std::printf("Chad says: groupx:%i, groupy%i, %f Blocksum, %f SUM, %f Average, %i XWidth, %i YWidth\n", groupx,groupy,blocksum,sum,average,XWidth,YWidth);}
-
+                         //if (histName2 == "cscChamberStripMENeg11a") {
+                               // std::printf("Chad says: groupx:%i, groupy%i, %f Blocksum, %f SUM, %f Average, %i XWidth, %i YWidth\n", groupx,groupy,blocksum,sum,average,XWidth,YWidth);}
+                         
 
 
 
