@@ -745,6 +745,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	} // End conditional: if (TrkHit.Is_RPC() == true && neighbor == false)
         if (TrkHit.Is_RPC() == true && neighbor == true){
             hist_index = histIndexRPC.at( {station, ring} );
+            if (endcap > 0) hist_index = 11 - hist_index;
             rpcHitDQMTiming[histIndexBX.at(trackHitBX)]->Fill((TrkHit.Sector_RPC() - 1) * 7, hist_index + 0.5);
         }
       } // End loop: for (int iHit = 0; iHit < numHits; ++iHit)
