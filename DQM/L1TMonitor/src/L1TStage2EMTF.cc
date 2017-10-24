@@ -264,6 +264,9 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
  
   cscTimingTot = ibooker.book2D("cscTimingTotal", "CSC Total BX ", 42, 1, 43, 20, 0, 20);    
   cscTimingTot->setAxisTitle("10 degree Chambers", 1);
+
+  rpcHitTimingTot = ibooker.book2D("rpcHitTimingTot", "RPC Chamber Occupancy ", 42, 1, 43, 12, 0, 12);
+  rpcHitTimingTot->setAxisTitle("Sector", 1);
   const std::array<std::string, 5> nameBX{{"BXNeg1","BXPos1","BXNeg2","BXPos2","BX0"}};
   const std::array<std::string, 5> labelBX{{"BX -1","BX +1","BX -2","BX +2","BX 0"}};
 
@@ -299,7 +302,7 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
     for (unsigned int ybin = 0; ybin < binNames.size(); ++ybin) {
       cscLCTTiming[hist]->setBinLabel(ybin+1, binNames[ybin], 2);
     }
-    
+      
     rpcHitTiming[hist] = ibooker.book2D("rpcHitTiming" + nameBX[hist], "RPC Chamber Occupancy " + labelBX[hist], 36, 1, 37, 12, 0, 12);
     rpcHitTiming[hist]->setAxisTitle("Sector", 1);
     for (int bin = 1; bin < 7; ++bin) {
@@ -307,7 +310,24 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
       rpcHitTiming[hist]->setBinLabel(bin, "RE-" + rpc_label[bin - 1], 2);
       rpcHitTiming[hist]->setBinLabel(13 - bin, "RE+" + rpc_label[bin - 1],2);
     }
-  
+    //Chad's new rpc plots to include neighbor jawns
+
+    rpcHitDQMTiming[hist] = ibooker.book2D("rpcHitDQMTiming" + nameBX[hist], "RPC Chamber Occupancy " + labelBX[hist], 42, 1, 43, 12, 0, 12);
+    rpcHitDQMTiming[hist]->setAxisTitle("Sector", 1);
+    for (int bin = 1; bin < 7; ++bin) {
+       rpcHitDQMTiming[hist]->setBinLabel(bin*7 - 6, std::to_string(bin), 1);
+       rpcHitDQMTiming[hist]->setBinLabel(bin*7, "N", 1);
+       rpcHitDQMTiming[hist]->setBinLabel(bin, "RE-" + rpc_label[bin - 1], 2);
+       rpcHitDQMTiming[hist]->setBinLabel(13 - bin, "RE+" + rpc_label[bin - 1],2);
+    }
+    if (hist==0){
+        for (int bin = 1; bin < 7; ++bin) {
+       rpcHitTimingTot->setBinLabel(bin*7 - 6, std::to_string(bin), 1);
+       rpcHitTimingTot->setBinLabel(bin*7, "N", 1);
+       rpcHitTimingTot->setBinLabel(bin, "RE-" + rpc_label[bin - 1], 2);
+       rpcHitTimingTot->setBinLabel(13 - bin, "RE+" + rpc_label[bin - 1],2);
+       }
+    }
     //if (hist == 4) continue; // Don't book for BX = 0
 
     count = 0;
@@ -343,6 +363,16 @@ void L1TStage2EMTF::bookHistograms(DQMStore::IBooker& ibooker, const edm::Run&, 
       rpcHitTimingFrac[hist]->setBinLabel(bin, "RE-" + rpc_label[bin - 1], 2);
       rpcHitTimingFrac[hist]->setBinLabel(13 - bin, "RE+" + rpc_label[bin - 1],2);
     }
+
+    rpcHitDQMTimingFrac[hist] = ibooker.book2D("rpcHitDQMTimingFrac" + nameBX[hist], "RPC Chamber Fraction in " + labelBX[hist], 42, 1, 43, 12, 0, 12);
+    rpcHitDQMTimingFrac[hist]->setAxisTitle("Sector", 1);
+    for (int bin = 1; bin < 7; ++bin) {
+       rpcHitDQMTimingFrac[hist]->setBinLabel(bin*7 - 6, std::to_string(bin), 1);
+       rpcHitDQMTimingFrac[hist]->setBinLabel(bin*7, "N", 1);
+       rpcHitDQMTimingFrac[hist]->setBinLabel(bin, "RE-" + rpc_label[bin - 1], 2);
+       rpcHitDQMTimingFrac[hist]->setBinLabel(13 - bin, "RE+" + rpc_label[bin - 1],2);
+    }
+
   }
       
   rpcHitTimingInTrack = ibooker.book2D("rpcHitTimingInTrack", "RPC Hit Timing (in Track)", 7, -3, 4, 12, 0, 12);
@@ -685,7 +715,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	  if (trackHitBX == 0 && ring == 2) {
 	    for (auto Hit = HitCollection->begin(); Hit != HitCollection->end(); ++Hit) {
 	      if ( Hit->Is_RPC() == false || neighbor == true ) continue;
-	      if ( std::abs(Track->Eta() - Hit->Eta()) > 0.1  ) continue;
+              if ( std::abs(Track->Eta() - Hit->Eta()) > 0.1  ) continue;
 	      if ( Hit->Endcap()  != endcap  || 
 		   Hit->Station() != station ||
 		   Hit->Chamber() != chamber ) continue;
@@ -693,10 +723,11 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 
 	      hist_index = histIndexRPC.at( {Hit->Station(), Hit->Ring()} );
 	      if (Hit->Endcap() > 0) hist_index = 11 - hist_index;
-	      rpcHitTimingInTrack->Fill(Hit->BX(), hist_index + 0.5);
+              rpcHitTimingInTrack->Fill(Hit->BX(), hist_index + 0.5);
 	      rpcHitTiming[histIndexBX.at(Hit->BX())]->Fill((Hit->Sector_RPC() - 1) * 6 + Hit->Subsector(), hist_index + 0.5);
-		    
-	    } // End loop: for (auto Hit = HitCollection->begin(); Hit != HitCollection->end(); ++Hit)
+	      rpcHitDQMTiming[histIndexBX.at(Hit->BX())]->Fill((Hit->Sector_RPC() - 1) * 7 + Hit->Subsector(), hist_index + 0.5);   
+              rpcHitTimingTot->Fill((Hit->Sector_RPC() - 1) * 7 + Hit->Subsector(), hist_index + 0.5);
+	    } // En     aaaaaad loop: for (auto Hit = HitCollection->begin(); Hit != HitCollection->end(); ++Hit)
 	  } // End conditional: if (trackHitBX == 0 && ring == 2)
 	} // End conditional: if (TrkHit.Is_CSC() == true)
 	
@@ -709,8 +740,13 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
 	
 	  rpcHitTimingInTrack->Fill(trackHitBX, hist_index + 0.5);
 	  rpcHitTiming[histIndexBX.at(trackHitBX)]->Fill((TrkHit.Sector_RPC() - 1) * 6 + subsector, hist_index + 0.5);
+          rpcHitDQMTiming[histIndexBX.at(trackHitBX)]->Fill((TrkHit.Sector_RPC() - 1) * 7 + subsector, hist_index + 0.5); 
+          rpcHitTimingTot->Fill((TrkHit.Sector_RPC() - 1) * 7 + subsector, hist_index + 0.5);
 	} // End conditional: if (TrkHit.Is_RPC() == true && neighbor == false)
-
+        if (TrkHit.Is_RPC() == true && neighbor == true){
+            hist_index = histIndexRPC.at( {station, ring} );
+            rpcHitDQMTiming[histIndexBX.at(trackHitBX)]->Fill((TrkHit.Sector_RPC() - 1) * 7, hist_index + 0.5);
+        }
       } // End loop: for (int iHit = 0; iHit < numHits; ++iHit)
     } 
     //////////////////////////////////////////////////
@@ -724,6 +760,7 @@ void L1TStage2EMTF::analyze(const edm::Event& e, const edm::EventSetup& c) {
     cscLCTTimingFrac[hist_index]->getTH2F()->Divide(cscLCTTiming[hist_index]->getTH2F(), cscLCTTiming[4]->getTH2F());
     cscDQMTimingFrac[hist_index]->getTH2F()->Divide(cscDQMTiming[hist_index]->getTH2F(), cscTimingTot->getTH2F());
     rpcHitTimingFrac[hist_index]->getTH2F()->Divide(rpcHitTiming[hist_index]->getTH2F(), rpcHitTiming[4]->getTH2F());
+    rpcHitDQMTimingFrac[hist_index]->getTH2F()->Divide(rpcHitDQMTiming[hist_index]->getTH2F(), rpcHitTimingTot->getTH2F());
   }
   
   // Regional Muon Candidates
