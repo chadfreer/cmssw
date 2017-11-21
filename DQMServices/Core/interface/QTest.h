@@ -347,7 +347,7 @@ protected:
   bool rangeInitialized_;  /*< init-flag for tolerance */
 };
 
-//==================== ContentSigma (added by Emma)=========================//
+//==================== ContentSigma (added by Emma and Chad)=========================//
 /// Check the sigma of each bin against the rest of the chamber by a factor of tolerance/
 class ContentSigma : public SimpleTest
 {
@@ -419,6 +419,7 @@ protected:
   /// for each bin get sum of the surrounding neighbors
  // double getNeighborSum(int binX, int binY, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
   double getNeighborSum(unsigned groupx, unsigned groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const; 
+  double getNeighborSigma(double average, unsigned groupx, unsigned groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const;
 
   bool noisy_; bool dead_;   /*< declare if test will be checking for noisy channels, dead channels, or both */
   float toleranceNoisy_;        /*< factor by which sigma is compared for noisy channels */
@@ -435,6 +436,7 @@ protected:
 	unsigned yMin_;
 	unsigned yMax_; 
 };
+
 
 //==================== ContentsWithinExpected  =========================//
 // Check that every TH2 channel has mean, RMS within allowed range.

@@ -948,7 +948,7 @@ double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const //adde
 }
 
 //-----------------------------------------------------//
-//---------  Content Sigma (added by Emma) ------------//
+//-----  Content Sigma (added by Emma and Chad)--------//
 //----------------------------------------------------//
 // run the test (result: fraction of channels with sigma that is not noisy or hot)
 
@@ -1116,7 +1116,13 @@ float ContentSigma::runTest(const MonitorElement *me)
      }
 
      double average = sum/(XWidth*YWidth - 1);
-     double avg_uncrt = average*sqrt(sum)/sum;
+     double sigma = getNeighborSigma(average, groupx, groupy, XBlocks, YBlocks, neighborsX, neighborsY, h);
+     sigma -= (average-blocksum) * (average-blocksum); //get rid of block being tested just like we did with the average
+     double sigma_2 = sqrt(sigma)/sqrt(XWidth*YWidth - 2);//N-1 where N=XWidth*YWidth - 1
+     double sigma_real = sigma_2/(XWidth*YWidth - 1);
+     //std::printf("The average is:%f  For sigma we get: %f\n",average, sigma_real);
+     //double avg_uncrt = average*sqrt(sum)/sum;
+     double avg_uncrt = 3*sigma_real;
 
      double probNoisy = ROOT::Math::poisson_cdf_c(blocksum - 1, average + avg_uncrt);
      double probDead = ROOT::Math::poisson_cdf(blocksum, average - avg_uncrt);
@@ -1241,6 +1247,85 @@ double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned X
     }
     return sum;
 }
+
+double ContentSigma::getNeighborSigma(double average, unsigned groupx, unsigned groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const {
+   double sigma = 0;
+   unsigned nbinsX = h->GetXaxis()->GetNbins();
+   unsigned nbinsY = h->GetYaxis()->GetNbins();
+   unsigned xMin = 1;
+   unsigned yMin = 1;
+   unsigned xMax = nbinsX;
+   unsigned yMax = nbinsY;
+   unsigned Xbinnum = 1;
+   unsigned Ybinnum = 1;
+   double block_sum;
+
+   if (xMin_ != 0 && xMax_ != 0) {
+      if ((xMax_ <= nbinsX) && (xMin_ <= xMax_)) {
+         nbinsX = xMax_ - xMin_ + 1;
+         xMax = xMax_;
+         xMin = xMin_;
+      }
+   }
+   if (yMin_ != 0 && yMax_ != 0) {
+      if ((yMax_ <= nbinsY) && (yMin_ <= yMax_)) {
+         nbinsY = yMax_ - yMin_ + 1;
+         yMax = yMax_;
+         yMin = yMin_;
+      }
+   }
+    if (Xblocks==999){
+       Xblocks=nbinsX;
+    }
+    if (Yblocks==999){
+       Yblocks=nbinsY;
+    }
+
+    Xbinnum = nbinsX/Xblocks;
+    Ybinnum = nbinsY/Yblocks;
+
+    unsigned xLow,xHi,yLow,yHi;
+    for (unsigned x_block_count=0; x_block_count<=2*neighborsX; ++x_block_count){
+       for (unsigned y_block_count=0; y_block_count<=2*neighborsY; ++y_block_count){
+          //Sum over blocks. Need to find standard deviation of average of blocksums. Set up low and hi values similar to sum but for blocks now.
+          if (groupx + x_block_count > neighborsX){
+             xLow=(groupx + x_block_count - neighborsX) * Xbinnum + xMin;
+             if (xLow < xMin){
+                 xLow = xMin;
+             }
+          }else{
+             xLow = xMin;
+          } 
+          xHi = xLow + Xbinnum;
+          if (xHi > xMax){
+             xHi = xMax;
+          }
+          if (groupy + y_block_count > neighborsY){
+             yLow=(groupy + y_block_count - neighborsY) * Ybinnum + yMin;
+             if (yLow < yMin){
+                 yLow = yMin;
+             }
+          }else{
+             yLow = yMin;
+          }
+          yHi = yLow + Ybinnum;
+          if (yHi > yMax){
+             yHi = yMax;
+          }
+          block_sum = 0;
+          for (unsigned x_block_bin=xLow; x_block_bin<=xHi; ++x_block_bin){
+             for (unsigned y_block_bin=yLow; y_block_bin<=yHi; ++y_block_bin){ 
+             block_sum += h->GetBinContent(x_block_bin,y_block_bin);
+             }
+          }
+          sigma += (average-block_sum)*(average-block_sum);//will sqrt and divide by sqrt(N-1) outside of function
+       }
+    }
+    return sigma;
+}
+
+
+
 
 //-----------------------------------------------------------//
 //----------------  ContentsWithinExpected ---------------------//
