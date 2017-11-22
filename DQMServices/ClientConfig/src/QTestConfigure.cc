@@ -19,9 +19,9 @@ const char * QTestConfigure::findOrDefault(const std::map<std::string, std::stri
   if (( iter = m.find(std::string(item))) != m.end()) {
     return (*iter).second.c_str();
   }
-  LogDebug("QTestConfigure") << "Warning, using default value for parameter "
-			     << item << " with default_value: "
-			     << default_value << std::endl;
+  edm::LogWarning("QTestConfigure") << "Warning, using default value for parameter "
+                                    << item << " with default_value: "
+                                    << default_value << std::endl;
   return default_value;
 }
 
@@ -44,14 +44,14 @@ bool QTestConfigure::enableTests(
       this->EnableDeadChannelTest(testName, params,bei);
     if(!std::strcmp(testType.c_str(),NoisyChannel::getAlgoName().c_str()))
       this->EnableNoisyChannelTest(testName, params,bei);
+    if(!std::strcmp(testType.c_str(),ContentSigma::getAlgoName().c_str()))
+      this->EnableContentSigmaTest(testName, params,bei); //added by Emma
     if(!std::strcmp(testType.c_str(),MeanWithinExpected::getAlgoName().c_str()))
       this->EnableMeanWithinExpectedTest(testName, params,bei);
     if(!std::strcmp(testType.c_str(),Comp2RefEqualH::getAlgoName().c_str()))
       this->EnableComp2RefEqualHTest(testName, params,bei);
     if(!std::strcmp(testType.c_str(),  Comp2RefChi2::getAlgoName().c_str()))
       this->EnableComp2RefChi2Test(testName, params,bei);
-    if(!std::strcmp(testType.c_str(),  Comp2Ref2DChi2::getAlgoName().c_str()))
-      this->EnableComp2Ref2DChi2Test(testName, params,bei);
     if(!std::strcmp(testType.c_str(),Comp2RefKolmogorov::getAlgoName().c_str()))
       this->EnableComp2RefKolmogorovTest(testName, params,bei);
     if(!std::strcmp(testType.c_str(),ContentsWithinExpected::getAlgoName().c_str()))
@@ -100,25 +100,6 @@ void QTestConfigure::EnableComp2RefChi2Test(std::string testName,
   me_qc1->setErrorProb(error);
 }
 
-void QTestConfigure::EnableComp2Ref2DChi2Test(std::string testName,
-                                              const std::map<std::string, std::string> & params,
-                                              DQMStore *bei) {
-  QCriterion * qc1;
-  if (! bei->getQCriterion(testName)) {
-    testsConfigured.push_back(testName);
-    qc1 = bei->createQTest(Comp2Ref2DChi2::getAlgoName(), testName);
-  } else {
-    qc1 = bei->getQCriterion(testName);
-  }
-  Comp2Ref2DChi2 * me_qc1 = (Comp2Ref2DChi2 *) qc1;
-  double warning = atof(findOrDefault(params, "warning", "0"));
-  double error   = atof(findOrDefault(params, "error", "0"));
-  int minEntries = atoi(findOrDefault(params, "minEntries", "0"));
-  me_qc1->setWarningProb(warning);
-  me_qc1->setErrorProb(error);
-  if ( minEntries != 0 )
-    me_qc1->setMinimumEntries(minEntries);
-}
 
 void QTestConfigure::EnableComp2RefKolmogorovTest(std::string testName,
                                                   const std::map<std::string, std::string> & params,
@@ -219,6 +200,50 @@ void QTestConfigure::EnableNoisyChannelTest(std::string testName,
   me_qc1->setErrorProb(error);
 }
 
+//==================== ContentSigma (added by Emma)=========================//
+void QTestConfigure::EnableContentSigmaTest(std::string testName,
+                                            const std::map<std::string, std::string> & params,
+                                            DQMStore *bei) {
+  QCriterion * qc1;
+  if (! bei->getQCriterion(testName)) {
+    testsConfigured.push_back(testName);
+    qc1 = bei->createQTest(ContentSigma::getAlgoName(), testName);
+  } else {
+    qc1 = bei->getQCriterion(testName);
+  }
+  ContentSigma * me_qc1  = (ContentSigma *) qc1;
+  unsigned int Xblocks = (unsigned int) atof(findOrDefault(params, "Xblocks", "0"));
+  unsigned int Yblocks = (unsigned int) atof(findOrDefault(params, "Yblocks", "0"));
+  unsigned int neighborsX = (unsigned int) atof(findOrDefault(params, "neighboursX", "0"));
+  unsigned int neighborsY = (unsigned int) atof(findOrDefault(params, "neighboursY", "0"));
+  double toleranceNoisy = atof(findOrDefault(params, "toleranceNoisy", "0"));
+  double toleranceDead = atof(findOrDefault(params, "toleranceDead", "0"));
+  int noisy = atoi(findOrDefault(params, "noisy", "0"));
+  int dead = atoi(findOrDefault(params, "dead", "0"));
+  unsigned int xMin = (unsigned int) atof(findOrDefault(params, "xMin", "1"));
+  unsigned int xMax = (unsigned int) atof(findOrDefault(params, "xMax", "500"));
+  unsigned int yMin = (unsigned int) atof(findOrDefault(params, "yMin", "1"));
+  unsigned int yMax = (unsigned int) atof(findOrDefault(params, "yMax", "500")); 
+  double warning = atof(findOrDefault(params, "warning", "0"));
+  double error = atof(findOrDefault(params, "error", "0"));
+  me_qc1->setNumXblocks (Xblocks);
+  me_qc1->setNumYblocks (Yblocks);
+  me_qc1->setNumNeighborsX (neighborsX);
+  me_qc1->setNumNeighborsY (neighborsY);
+  me_qc1->setToleranceNoisy (toleranceNoisy);
+  me_qc1->setToleranceDead (toleranceDead);
+  me_qc1->setNoisy (noisy);
+  me_qc1->setDead (dead);
+  me_qc1->setXMin (xMin);
+  me_qc1->setXMax (xMax);
+  me_qc1->setYMin (yMin);
+  me_qc1->setYMax (yMax); 
+  me_qc1->setWarningProb(warning);
+  me_qc1->setErrorProb(error);
+}
+
+//==========================================================================//
+
 void QTestConfigure::EnableMeanWithinExpectedTest(std::string testName,
                                                   const std::map<std::string, std::string> & params,
                                                   DQMStore *bei) {
@@ -291,7 +316,6 @@ void QTestConfigure::EnableCompareToMedianTest(std::string testName,
   const std::string                        &roTEST_NAME,
   std::map<std::string, std::string> &roMParams,
   DQMStore                     *bei) {
-
   // Create QTest or Get already assigned one
   MostProbableLandau *poQTest = 0;
   if( QCriterion *poQCriteration = bei->getQCriterion( roTEST_NAME)) {
@@ -302,10 +326,8 @@ void QTestConfigure::EnableCompareToMedianTest(std::string testName,
   testsConfigured.push_back( roTEST_NAME);
   poQCriteration = bei->createQTest( MostProbableLandau::getAlgoName(),
   roTEST_NAME);
-
   poQTest = dynamic_cast<MostProbableLandau *>( poQCriteration);
   }
-
   // Set probabilities thresholds.
   poQTest->setErrorProb    ( atof( roMfindOrDefault(params, "error", "0") );
   poQTest->setWarningProb  ( atof( roMfindOrDefault(params, "warning", "0") );
@@ -396,7 +418,6 @@ void QTestConfigure::EnableCheckVarianceTest(std::string testName,
 }
 
 /* void QTestConfigure::EnableContentsWithinExpectedASTest(std::string testName, std::map<std::string, std::string> params, DQMStore *bei){
-
 QCriterion * qc1;
 if(! bei->getQCriterion(testName) ){
 testsConfigured.push_back(testName);
@@ -405,16 +426,11 @@ qc1 = bei->createQTest(ContentsWithinExpectedAS::getAlgoName(),testName);
 qc1 = bei->getQCriterion(testName);
 }
 ContentsWithinExpectedAS * me_qc1 = (ContentsWithinExpectedAS *) qc1;
-
 double warning=atof(findOrDefault(params, "warning", "0");
 double error=atof(findOrDefault(params, "error", "0");
 me_qc1->setWarningProb(warning);
 me_qc1->setErrorProb(error);
-
 double minCont=atof(findOrDefault(params, "minCont", "0");
 double maxCont=atof(findOrDefault(params, "maxCont", "0");
 if ( minCont != 0 || maxCont != 0 ) me_qc1->setContentsRange(minCont, maxCont);
-
-
 } */
-
