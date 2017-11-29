@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
-process = cms.Process("L1TStage2DQM", eras.Run2_2016)
+process = cms.Process("L1TStage2DQM", eras.Run2_2017)
 
 #--------------------------------------------------
 # Event Source and Condition
@@ -14,6 +14,10 @@ process.load("DQM.Integration.config.fileinputsource_cfi")
 
 # Required to load Global Tag
 process.load("DQM.Integration.config.FrontierCondition_GT_cfi") 
+#process.load("DQM.Integration.config.FrontierCondition_GT_autoExpress_cfi")
+
+from Configuration.AlCa.GlobalTag import GlobalTag as gtCustomise
+process.GlobalTag = gtCustomise(process.GlobalTag, 'auto:run2_data', '')
 
 # Required to load EcalMappingRecord
 process.load("Configuration.StandardSequences.GeometryRecoDB_cff")
