@@ -20,8 +20,8 @@ options.register(
 )
 
 options.register('runNumber',
-                 #297057,
-                 297178,
+                 297057,
+                 #297178,
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Run number. This run number has to be present in the dataset configured with the dataset option.")
