@@ -1,5 +1,5 @@
 <TESTSCONFIGURATION>
-
+	<!-- Quality tests designed for 2018 EMTF DQM plots (Chad Freer) -->
     	<QTEST name="XRange_Errors">
 		<TYPE>ContentsXRange</TYPE>	
 		<PARAM name="xmin">0</PARAM>

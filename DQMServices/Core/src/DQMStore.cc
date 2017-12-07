@@ -609,6 +609,7 @@ DQMStore::initializeFrom(const edm::ParameterSet& pset) {
   }
 
   initQCriterion<Comp2RefChi2>(qalgos_);
+  initQCriterion<Comp2Ref2DChi2>(qalgos_);
   initQCriterion<Comp2RefKolmogorov>(qalgos_);
   initQCriterion<ContentsXRange>(qalgos_);
   initQCriterion<ContentsYRange>(qalgos_);
@@ -1239,6 +1240,24 @@ DQMStore::book2D(const std::string &name, const std::string &title,
                  int nchX, const float *xbinsize, int nchY, const float *ybinsize)
 {
   return book2D(pwd_, name, new TH2F(name.c_str(), title.c_str(),
+                                     nchX, xbinsize, nchY, ybinsize));
+}
+
+/// Book 2S variable bin histogram.
+MonitorElement *
+DQMStore::book2S(const char *name, const char *title,
+                 int nchX, const float *xbinsize, int nchY, const float *ybinsize)
+{
+  return book2S(pwd_, name, new TH2S(name, title,
+                                     nchX, xbinsize, nchY, ybinsize));
+}
+
+/// Book 2S variable bin histogram.
+MonitorElement *
+DQMStore::book2S(const std::string &name, const std::string &title,
+                 int nchX, const float *xbinsize, int nchY, const float *ybinsize)
+{
+  return book2S(pwd_, name, new TH2S(name.c_str(), title.c_str(),
                                      nchX, xbinsize, nchY, ybinsize));
 }
 

@@ -13,12 +13,13 @@
 //#include "DQMServices/Core/interface/DQMStore.h"
 
 class Comp2RefChi2;			typedef Comp2RefChi2 Comp2RefChi2ROOT;
+class Comp2Ref2DChi2;			typedef Comp2Ref2DChi2 Comp2Ref2DChi2ROOT;
 class Comp2RefKolmogorov;		typedef Comp2RefKolmogorov Comp2RefKolmogorovROOT;
 class Comp2RefEqualH;			typedef Comp2RefEqualH Comp2RefEqualHROOT;
 class ContentsXRange;			typedef ContentsXRange ContentsXRangeROOT;
 class ContentsYRange;			typedef ContentsYRange ContentsYRangeROOT;
 class NoisyChannel;			typedef NoisyChannel NoisyChannelROOT;
-class ContentSigma;			typedef ContentSigma ContentSigmaROOT; //added by Emma
+class ContentSigma;			typedef ContentSigma ContentSigmaROOT;
 class DeadChannel;			typedef DeadChannel DeadChannelROOT;
 class ContentsWithinExpected;		typedef ContentsWithinExpected ContentsWithinExpectedROOT;
 class MeanWithinExpected;		typedef MeanWithinExpected MeanWithinExpectedROOT;
@@ -207,6 +208,34 @@ protected:
   int Ndof_; double chi2_;
 };
 
+//===================== Comp2Ref2DChi2 =================//
+// comparison to reference using the 2D chi^2 algorithm
+class Comp2Ref2DChi2 : public SimpleTest
+{
+public:
+  Comp2Ref2DChi2(const std::string &name) :SimpleTest(name)
+  { 
+    setAlgoName(getAlgoName()); 
+  }
+  static std::string getAlgoName(void) { return "Comp2Ref2DChi2"; }
+  float runTest(const MonitorElement*me);
+  
+protected:
+
+  void setMessage(void) 
+  {
+    std::ostringstream message;
+    message << "chi2/Ndof = " << chi2_ << "/" << Ndof_
+	    << ", minimum needed statistics = " << minEntries_
+	    << " warning threshold = " << this->warningProb_
+	    << " error threshold = " << this->errorProb_;
+    message_ = message.str();
+  }
+
+  // # of degrees of freedom and chi^2 for test
+  int Ndof_; double chi2_;
+};
+
 //===================== Comp2RefKolmogorov ===================//
 /// Comparison to reference using the  Kolmogorov algorithm
 class Comp2RefKolmogorov : public SimpleTest
@@ -339,7 +368,7 @@ protected:
   /// get average for bin under consideration
   /// (see description of method setNumNeighbors)
   double getAverage(int bin, const TH1 *h) const;
-  double getAverage2D(int binX, int binY, const TH1 *h) const; //added by Emma
+  double getAverage2D(int binX, int binY, const TH1 *h) const;
 
   float tolerance_;        /*< tolerance for considering a channel noisy */
   unsigned numNeighbors_;  /*< # of neighboring channels for calculating average to be used
@@ -347,7 +376,7 @@ protected:
   bool rangeInitialized_;  /*< init-flag for tolerance */
 };
 
-//==================== ContentSigma (added by Emma and Chad)=========================//
+//===============ContentSigma (Emma Yeager and Chad Freer)=====================//
 /// Check the sigma of each bin against the rest of the chamber by a factor of tolerance/
 class ContentSigma : public SimpleTest
 {

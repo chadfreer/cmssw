@@ -52,7 +52,7 @@ class QTestConfigure{
    ///Creates NoisyChannelROOT test
   void EnableNoisyChannelTest(std::string testName, 
                               const std::map<std::string,std::string>& params,DQMStore * bei);
-   ///Creates ContentSigmaROOT test added by Emma
+   ///Creates ContentSigmaROOT test
   void EnableContentSigmaTest(std::string testName, 
                               const std::map<std::string,std::string>& params,DQMStore * bei);
     ///Creates MeanWithinExpectedROOT test
@@ -66,6 +66,10 @@ class QTestConfigure{
 
 ///Creates Comp2RefChi2 test
  void EnableComp2RefChi2Test(std::string testName, 
+                     const std::map<std::string, std::string>& params,DQMStore * bei); 
+
+///Creates Comp2Ref2DChi2 test
+ void EnableComp2Ref2DChi2Test(std::string testName, 
                      const std::map<std::string, std::string>& params,DQMStore * bei); 
 
  ///Creates EnableComp2RefKolmogorov test

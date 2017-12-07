@@ -6,8 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
-
-#include "Math/ProbFuncMathCore.h" //added by Emma
+#include "Math/ProbFuncMathCore.h"
 
 using namespace std;
 
@@ -83,6 +82,16 @@ float Comp2RefEqualH::runTest(const MonitorElement*me)
     ref_ = me->getRefTH1D(); //access Ref hiso 
     if (nbins != nbinsref) return -1;
   } 
+  //-- TPROFILE
+  else if (me->kind()==MonitorElement::DQM_KIND_TPROFILE)
+  { 
+    nbins = me->getTProfile()->GetXaxis()->GetNbins(); 
+    nbinsref = me->getRefTProfile()->GetXaxis()->GetNbins();
+    h  = me->getTProfile(); // access Test histo
+    ref_ = me->getRefTProfile(); //access Ref hiso 
+    if (nbins != nbinsref) return -1;
+  } 
+
   //-- TH2
   else if (me->kind()==MonitorElement::DQM_KIND_TH2F)
   { 
@@ -286,6 +295,107 @@ float Comp2RefChi2::runTest(const MonitorElement *me)
   }
   chi2_ = chi2;  Ndof_ = ndof;
   return TMath::Prob(0.5*chi2, int(0.5*ndof));
+}
+
+//-------------------------------------------------------//
+//-----------------  Comp2Ref2DChi2 ---------------------//
+//-------------------------------------------------------//
+float Comp2Ref2DChi2::runTest(const MonitorElement *me)
+{
+  if (!me) 
+    return -1;
+  if (!me->getRootObject() || !me->getRefRootObject()) 
+    return -1;
+  if (minEntries_ != 0 && me->getEntries() < minEntries_)
+    return -1;
+
+  TH2* h=nullptr;
+  TH2* ref_=nullptr;
+ 
+  if (verbose_>1) 
+    std::cout << "QTest:" << getAlgoName() << "::runTest called on " 
+              << me-> getFullname() << "\n";
+  //-- TH2F
+  if (me->kind()==MonitorElement::DQM_KIND_TH2F)
+  { 
+    h = me->getTH2F(); // access Test histo
+    ref_ = me->getRefTH2F(); //access Ref histo
+  } 
+  //-- TH2S
+  else if (me->kind()==MonitorElement::DQM_KIND_TH2S)
+  { 
+    h = me->getTH2S(); // access Test histo
+    ref_ = me->getRefTH2S(); //access Ref histo
+  } 
+  //-- TH2D
+  else if (me->kind()==MonitorElement::DQM_KIND_TH2D)
+  { 
+    h = me->getTH2D(); // access Test histo
+    ref_ = me->getRefTH2D(); //access Ref histo
+  } 
+  //-- TProfile
+  else if (me->kind()==MonitorElement::DQM_KIND_TPROFILE2D)
+  {
+    h = me->getTProfile2D(); // access Test histo
+    ref_ = me->getRefTProfile2D(); //access Ref histo
+  } 
+  else
+  { 
+    if (verbose_>0) 
+      std::cout << "QTest::Comp2Ref2DChi2"
+                << " ME does not contain TH2F/TH2S/TH2D/TProfile2D, exiting\n"; 
+    return -1;
+  } 
+
+  //-- isInvalid ? - Check consistency in number of channels
+  int ncx1  = h->GetXaxis()->GetNbins(); 
+  int ncx2  = ref_->GetXaxis()->GetNbins();
+  int ncy1  = h->GetYaxis()->GetNbins(); 
+  int ncy2  = ref_->GetYaxis()->GetNbins();
+  if ( ( ncx1 !=  ncx2) || ( ncy1 !=  ncy2) )
+  {
+    if (verbose_>0) 
+      std::cout << "QTest:Comp2Ref2DChi2"
+                << " different number of channels! ("
+                << ncx1 << ", " << ncx2 << "), ("
+                << ncy1 << ", " << ncy2 << "), exiting\n";
+    return -1;
+  } 
+
+  //--  QUALITY TEST itself 
+  //reset Results
+  Ndof_ = 0; chi2_ = -1.;
+
+  //check that the histograms are not empty
+  int i_start = h->GetXaxis()->GetFirst();
+  int i_end   = h->GetXaxis()->GetLast();
+  int j_start = h->GetYaxis()->GetFirst();
+  int j_end   = h->GetYaxis()->GetLast();
+  if (h->Integral(i_start, i_end, j_start, j_end) == 0)
+  {
+    if (verbose_>0) 
+      std::cout << "QTest:Comp2Ref2DChi2"
+                << " Test Histogram " << h->GetName() 
+		<< " is empty, exiting\n";
+    return -1;
+  }
+  if (ref_->Integral(i_start, i_end, j_start, j_end) == 0)
+  {
+    if (verbose_>0) 
+      std::cout << "QTest:Comp2Ref2DChi2"
+                << " Ref Histogram " << ref_->GetName() 
+                << " is empty, exiting\n";
+    return -1;
+  }
+
+  //use the chi2 test for 2D histograms defined in ROOT
+  int igood = 0;
+  double pValue = h->Chi2TestX(ref_, chi2_, Ndof_, igood, "");
+
+  if (chi2_==-1. && Ndof_==0)
+    return -1;
+
+  return pValue;
 }
 
 //-------------------------------------------------------//
@@ -760,7 +870,7 @@ float NoisyChannel::runTest(const MonitorElement *me)
               << me-> getFullname() << "\n";
 
   int nbins=0;
-  int nbinsX=0, nbinsY=0; //added by Emma
+  int nbinsX=0, nbinsY=0; 
   //-- TH1F
   if (me->kind()==MonitorElement::DQM_KIND_TH1F)
   { 
@@ -783,9 +893,9 @@ float NoisyChannel::runTest(const MonitorElement *me)
   else if (me->kind()==MonitorElement::DQM_KIND_TH2F)
   { 
 //    nbins = me->getTH2F()->GetXaxis()->GetNbins() *
-//            me->getTH2F()->GetYaxis()->GetNbins(); //removed by Emma
-    nbinsX = me->getTH2F()->GetXaxis()->GetNbins(); //added by Emma
-    nbinsY = me->getTH2F()->GetYaxis()->GetNbins(); //added by Emma
+//            me->getTH2F()->GetYaxis()->GetNbins(); 
+    nbinsX = me->getTH2F()->GetXaxis()->GetNbins(); 
+    nbinsY = me->getTH2F()->GetYaxis()->GetNbins(); 
     h  = me->getTH2F(); // access Test histo
   } 
   //-- TH2
@@ -820,12 +930,12 @@ float NoisyChannel::runTest(const MonitorElement *me)
   int first = 1;
   // do NOT use overflow bin
   int last  = nbins;
-  int lastX  = nbinsX, lastY  = nbinsY; //added by Emma
+  int lastX  = nbinsX, lastY  = nbinsY;
   // bins outside Y-range
   int fail = 0;
   int bin;
-  int binX, binY; //added by Emma
-  if (nbinsY == 0) { //added by Emma for 1D histograms
+  int binX, binY;
+  if (nbinsY == 0) { 
     for (bin = first; bin <= last; ++bin)
     {
       double contents = h->GetBinContent(bin);
@@ -845,7 +955,7 @@ float NoisyChannel::runTest(const MonitorElement *me)
     // return fraction of bins that passed test
     return 1.*(nbins - fail)/nbins;
     }
-  else { //added by Emma for 2D histograms
+  else { 
     for (binY = first; binY <= lastY; ++binY) {
       for (binX = first; binX <= lastX; ++binX) {
         double contents = h->GetBinContent(binX, binY);
@@ -892,7 +1002,7 @@ double NoisyChannel::getAverage(int bin, const TH1 *h) const
   return sum/(numNeighbors_ * 2);
 }
 
-double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const //added by Emma
+double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const
 {
   /// do NOT use underflow bin
   int first = 1;
@@ -948,7 +1058,7 @@ double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const //adde
 }
 
 //-----------------------------------------------------//
-//-----  Content Sigma (added by Emma and Chad)--------//
+//-----Content Sigma (Emma Yeager and Chad Freer)------//
 //----------------------------------------------------//
 // run the test (result: fraction of channels with sigma that is not noisy or hot)
 
@@ -1022,14 +1132,14 @@ float ContentSigma::runTest(const MonitorElement *me)
   //--  QUALITY TEST itself 
 
   if ( !rangeInitialized_ || !h->GetXaxis() ) 
-    return 1; 						// all channels are accepted if tolerance has not been set
+    return 1; 							// all channels are accepted if tolerance has not been set
 
-  int fail = 0;   					// initialize bin failure count
-  unsigned xMin = 1;					//initialize minimums and maximums with expected values
+  int fail = 0;   						// initialize bin failure count
+  unsigned xMin = 1;						//initialize minimums and maximums with expected values
   unsigned yMin =1;
   unsigned xMax = nbinsX; 
   unsigned yMax = nbinsY;
-  unsigned XBlocks = numXblocks_;			//Initialize xml inputs blocks and neighbors
+  unsigned XBlocks = numXblocks_;				//Initialize xml inputs blocks and neighbors
   unsigned YBlocks = numYblocks_;
   unsigned neighborsX = numNeighborsX_; 
   unsigned neighborsY = numNeighborsY_;
@@ -1045,16 +1155,16 @@ float ContentSigma::runTest(const MonitorElement *me)
       neighborsY=0;
    }
    
-   if (xMin_ != 0 && xMax_ != 0) {			//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
-		                        		// check that user's parameters are completely in agreement with histogram
-		                        		// for instance, if inputted xMax is out of range xMin will automatically be ignored
-      if ((xMax_ <= nbinsX) && (xMin_ <= xMax_)) { 	// rescale area of histogram being analyzed
+   if (xMin_ != 0 && xMax_ != 0) {				//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
+		                        			// check that user's parameters are completely in agreement with histogram
+		                        			// for instance, if inputted xMax is out of range xMin will automatically be ignored
+      if ((xMax_ <= nbinsX) && (xMin_ <= xMax_)) {	 	// rescale area of histogram being analyzed
          nbinsX = xMax_ - xMin_ + 1;
-         xMax = xMax_;   				// do NOT use overflow bin
-	 xMin = xMin_;   				// do NOT use underflow bin
+         xMax = xMax_;   					// do NOT use overflow bin
+	 xMin = xMin_;  	 				// do NOT use underflow bin
       }
    }
-   if (yMin_ != 0 && yMax_ != 0) {			//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
+   if (yMin_ != 0 && yMax_ != 0) {				//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
       if ((yMax_ <= nbinsY) && (yMin_ <= yMax_)) {
          nbinsY = yMax_ - yMin_ + 1;
 	 yMax = yMax_;
@@ -1062,9 +1172,9 @@ float ContentSigma::runTest(const MonitorElement *me)
       }
    }
 
-  if (neighborsX*2 >= nbinsX) {				//make sure neighbor check does not overlap with bin under consideration
+  if (neighborsX*2 >= nbinsX) {					//make sure neighbor check does not overlap with bin under consideration
     if (nbinsX%2 == 0) {
-      neighborsX = nbinsX/2 - 1; 			//set neighbors for no overlap
+      neighborsX = nbinsX/2 - 1;	 			//set neighbors for no overlap
     }
     else { neighborsX = (nbinsX - 1)/2; }
   }
@@ -1076,7 +1186,7 @@ float ContentSigma::runTest(const MonitorElement *me)
     else { neighborsY = (nbinsY - 1)/2; }
   }
 
-  if (XBlocks==999){					//Setting 999 prevents blocks and does quality tests by bins only
+  if (XBlocks==999){						//Setting 999 prevents blocks and does quality tests by bins only
      XBlocks=nbinsX;
   }
   if (YBlocks==999){
@@ -1085,11 +1195,11 @@ float ContentSigma::runTest(const MonitorElement *me)
   
   Xbinnum = nbinsX/XBlocks;
   Ybinnum = nbinsY/YBlocks;
-  for (unsigned groupx=0; groupx<XBlocks; ++groupx){ 	//Test over all the blocks
+  for (unsigned groupx=0; groupx<XBlocks; ++groupx){ 		//Test over all the blocks
      for (unsigned groupy=0; groupy<YBlocks; ++groupy){
 
         double blocksum = 0;
-        for (unsigned binx=0; binx<Xbinnum; ++binx){	//Sum the contents of the block in question
+        for (unsigned binx=0; binx<Xbinnum; ++binx){		//Sum the contents of the block in question
            for (unsigned biny=0; biny<Ybinnum; ++biny){
               if (groupx*Xbinnum+xMin+binx<=xMax && groupy*Ybinnum+yMin+biny<=yMax){
                  blocksum += abs(h->GetBinContent(groupx*Xbinnum+xMin+binx,groupy*Ybinnum+yMin+biny));
@@ -1098,9 +1208,9 @@ float ContentSigma::runTest(const MonitorElement *me)
         }
 
      double sum = getNeighborSum(groupx, groupy, XBlocks, YBlocks, neighborsX, neighborsY, h); 
-     sum -= blocksum; 					//remove center block to test
+     sum -= blocksum; 						//remove center block to test
    
-     if (neighborsX>groupx){				//Find correct average at the edges
+     if (neighborsX>groupx){					//Find correct average at the edges
         XWidth = neighborsX + groupx + 1;
      }else if (neighborsX>(XBlocks-(groupx+1))){
         XWidth = (XBlocks-groupx)+neighborsX;
@@ -1117,11 +1227,10 @@ float ContentSigma::runTest(const MonitorElement *me)
 
      double average = sum/(XWidth*YWidth - 1);
      double sigma = getNeighborSigma(average, groupx, groupy, XBlocks, YBlocks, neighborsX, neighborsY, h);
-     sigma -= (average-blocksum) * (average-blocksum); //get rid of block being tested just like we did with the average
-     double sigma_2 = sqrt(sigma)/sqrt(XWidth*YWidth - 2);//N-1 where N=XWidth*YWidth - 1
+     sigma -= (average-blocksum) * (average-blocksum); 			//get rid of block being tested just like we did with the average
+     double sigma_2 = sqrt(sigma)/sqrt(XWidth*YWidth - 2);		//N-1 where N=XWidth*YWidth - 1
      double sigma_real = sigma_2/(XWidth*YWidth - 1);
-     //std::printf("The average is:%f  For sigma we get: %f\n",average, sigma_real);
-     //double avg_uncrt = average*sqrt(sum)/sum;
+     //double avg_uncrt = average*sqrt(sum)/sum;//Obsolete now(Chad Freer)
      double avg_uncrt = 3*sigma_real;
 
      double probNoisy = ROOT::Math::poisson_cdf_c(blocksum - 1, average + avg_uncrt);
@@ -1148,21 +1257,11 @@ float ContentSigma::runTest(const MonitorElement *me)
                         	failureDead = probDead < thresholdDead;
                         }
                 }else { std::cout<<"No test type selected!\n"; }
-                        string histName = h->GetName();
-                       // if (histName == "emtfTrackBX") {
-                       // 	std::printf("  For content: %f we get average: %f\n", blocksum, average);
-                       //         std::printf("   NOISY:: Probability: %f and Threshold: %f\n", probNoisy, thresholdNoisy);
-                       //         std::printf("   DEAD::  Probability: %f and Threshold: %f\n", probDead, thresholdDead);
-                       //         std::printf("For block: (%i,%i) we get failureNoisy: %i and failureDead: %i\n", groupx, groupy, failureNoisy, failureDead); 
-                       //         std::printf("Chad says: %i XBlocks, %i XBlocks, %f Blocksum, %f Average", XBlocks,YBlocks,blocksum,average);}
+                       	//Following lines useful for debugging using verbose (Chad Freer)
+			//string histName = h->GetName();
+                       	//if (histName == "emtfTrackBX") { 
+                       	//   std::printf("Chad says: %i XBlocks, %i XBlocks, %f Blocksum, %f Average", XBlocks,YBlocks,blocksum,average);}
       }       
-
-                        string histName2 = h->GetName();
-                         //if (histName2 == "cscChamberStripMENeg11a") {
-                               // std::printf("Chad says: groupx:%i, groupy%i, %f Blocksum, %f SUM, %f Average, %i XWidth, %i YWidth\n", groupx,groupy,blocksum,sum,average,XWidth,YWidth);}
-                         
-
-
 
           if (failureNoisy || failureDead) {
       		++fail;
@@ -1175,7 +1274,7 @@ float ContentSigma::runTest(const MonitorElement *me)
 }
 
 
-//Gets the sum of the bins surrounding the block to be tested
+//Gets the sum of the bins surrounding the block to be tested (Chad Freer)
 double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const {
    double sum = 0;
    unsigned nbinsX = h->GetXaxis()->GetNbins();
@@ -1187,13 +1286,13 @@ double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned X
    unsigned Xbinnum = 1;
    unsigned Ybinnum = 1;
 
-   if (xMin_ != 0 && xMax_ != 0) {			//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
-                                       			// check that user's parameters are completely in agreement with histogram
-                                       			// for instance, if inputted xMax is out of range xMin will automatically be ignored
+   if (xMin_ != 0 && xMax_ != 0) {				//give users option for automatic mininum and maximum selection by inputting 0 to any of the parameters
+                                       				// check that user's parameters are completely in agreement with histogram
+                                       				// for instance, if inputted xMax is out of range xMin will automatically be ignored
       if ((xMax_ <= nbinsX) && (xMin_ <= xMax_)) {
          nbinsX = xMax_ - xMin_ + 1;
-         xMax = xMax_;            			// do NOT use overflow bin
-         xMin = xMin_;            			// do NOT use underflow bin
+         xMax = xMax_;            				// do NOT use overflow bin
+         xMin = xMin_;            				// do NOT use underflow bin
       }
    }
    if (yMin_ != 0 && yMax_ != 0) {
@@ -1204,7 +1303,7 @@ double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned X
       }
    }
 
-    if (Xblocks==999){					//Check to see if blocks should be ignored
+    if (Xblocks==999){						//Check to see if blocks should be ignored
        Xblocks=nbinsX;
     }
     if (Yblocks==999){
@@ -1214,11 +1313,11 @@ double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned X
     Xbinnum = nbinsX/Xblocks;
     Ybinnum = nbinsY/Yblocks;     
 
-    unsigned xLow,xHi,yLow,yHi;				//Define the neighbor blocks edges to be summed
+    unsigned xLow,xHi,yLow,yHi;					//Define the neighbor blocks edges to be summed
     if (groupx>neighborsX){
        xLow=(groupx-neighborsX)*Xbinnum+xMin;
        if (xLow<xMin){
-          xLow=xMin; 					//If the neigbor block would go outside the histogram edge, set it the edge
+          xLow=xMin; 						//If the neigbor block would go outside the histogram edge, set it the edge
        }
     }else{
        xLow=xMin;
@@ -1240,7 +1339,7 @@ double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned X
        yHi=yMax;
     }
 
-    for (unsigned xbin=xLow; xbin<=xHi; ++xbin){	//now sum over all the bins
+    for (unsigned xbin=xLow; xbin<=xHi; ++xbin){		//now sum over all the bins
        for (unsigned ybin=yLow; ybin<=yHi; ++ybin){
           sum += h->GetBinContent(xbin,ybin);
        }
@@ -1248,6 +1347,7 @@ double ContentSigma::getNeighborSum(unsigned groupx, unsigned groupy, unsigned X
     return sum;
 }
 
+//Similar to algorithm  above but returns a version of standard deviation. Additional operations to return real standard deviation used above (Chad Freer)
 double ContentSigma::getNeighborSigma(double average, unsigned groupx, unsigned groupy, unsigned Xblocks, unsigned Yblocks, unsigned neighborsX, unsigned neighborsY, const TH1 *h) const {
    double sigma = 0;
    unsigned nbinsX = h->GetXaxis()->GetNbins();
@@ -1318,14 +1418,11 @@ double ContentSigma::getNeighborSigma(double average, unsigned groupx, unsigned 
              block_sum += h->GetBinContent(x_block_bin,y_block_bin);
              }
           }
-          sigma += (average-block_sum)*(average-block_sum);//will sqrt and divide by sqrt(N-1) outside of function
+          sigma += (average-block_sum)*(average-block_sum);		//will sqrt and divide by sqrt(N-1) outside of function
        }
     }
     return sigma;
 }
-
-
-
 
 //-----------------------------------------------------------//
 //----------------  ContentsWithinExpected ---------------------//

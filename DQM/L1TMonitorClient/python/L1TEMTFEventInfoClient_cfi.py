@@ -6,7 +6,7 @@
 #   authors previous versions - see CVS
 #
 #   V.M. Ghete 2010-10-22 revised version of L1T DQM and L1TEMU DQM
-
+#   Chad Freer: Modified for running on 2018 EMTF DQM
 
 
 import FWCore.ParameterSet.Config as cms
