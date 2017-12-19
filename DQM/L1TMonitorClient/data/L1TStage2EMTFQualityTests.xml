@@ -56,8 +56,8 @@
                 <PARAM name="neighboursY">2</PARAM>
                 <PARAM name="noisy">1</PARAM>
                 <PARAM name="dead">0</PARAM>
-                <PARAM name="error">0.940</PARAM><!-- 6 failed 20 degree CFEBs or 11 failed 10 degree CFEBs-->
-                <PARAM name="warning">0.975</PARAM><!-- 3 failed 20 degree CFEBs or 5 failed 10 degree CFEBs-->
+                <PARAM name="error">0.900</PARAM><!-- 11 failed 10 degree CFEBs-->
+                <PARAM name="warning">0.965</PARAM><!-- 5 failed 10 degree CFEBs-->
                 <PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
                 <PARAM name="xMax">0</PARAM>
                 <PARAM name="yMin">0</PARAM>
@@ -74,8 +74,8 @@
                 <PARAM name="neighboursY">2</PARAM>
                 <PARAM name="noisy">0</PARAM>
                 <PARAM name="dead">1</PARAM>
-                <PARAM name="error">0.940</PARAM><!-- 6 failed 20 degree CFEBs or 11 failed 10 degree CFEBs-->
-                <PARAM name="warning">0.975</PARAM><!-- 3 failed 20 degree CFEBs or 5 failed 10 degree CFEBs-->
+                <PARAM name="error">0.900</PARAM><!-- 11 failed 10 degree CFEBs-->
+                <PARAM name="warning">0.965</PARAM><!-- 5 failed 10 degree CFEBs-->
                 <PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
                 <PARAM name="xMax">0</PARAM>
                 <PARAM name="yMin">0</PARAM>
@@ -93,8 +93,8 @@
         	<PARAM name="neighboursY">2</PARAM>
         	<PARAM name="noisy">1</PARAM>
         	<PARAM name="dead">0</PARAM>
-        	<PARAM name="error">0.940</PARAM><!-- 6 failed 20 degree CFEBs or 11 failed 10 degree CFEBs-->
-        	<PARAM name="warning">0.975</PARAM><!-- 3 failed 20 degree CFEBs or 5 failed 10 degree CFEBs-->
+                <PARAM name="error">0.930</PARAM><!-- 11 failed 10 degree CFEBs-->
+                <PARAM name="warning">0.970</PARAM><!--  5 failed 10 degree CFEBs-->
         	<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
         	<PARAM name="xMax">0</PARAM>
         	<PARAM name="yMin">0</PARAM>
@@ -111,8 +111,8 @@
         	<PARAM name="neighboursY">2</PARAM>
         	<PARAM name="noisy">0</PARAM>
         	<PARAM name="dead">1</PARAM>
-        	<PARAM name="error">0.940</PARAM><!-- 6 failed 20 degree CFEBs or 11 failed 10 degree CFEBs-->
-        	<PARAM name="warning">0.975</PARAM><!-- 3 failed 20 degree CFEBs or 5 failed 10 degree CFEBs-->
+        	<PARAM name="error">0.930</PARAM><!-- 11 failed 10 degree CFEBs-->
+        	<PARAM name="warning">0.970</PARAM><!--  5 failed 10 degree CFEBs-->
         	<PARAM name="xMin">0</PARAM> <!-- specify area of histogram to be analyzed -->
         	<PARAM name="xMax">0</PARAM>
         	<PARAM name="yMin">0</PARAM>
