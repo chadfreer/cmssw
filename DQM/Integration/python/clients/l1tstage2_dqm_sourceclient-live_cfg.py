@@ -105,9 +105,9 @@ process.l1tEMTFMonitorClientPath = cms.Path(process.l1tEMTFMonitorClient)
 #process.load("DQM.L1TMonitor.L1TMonitor_cff")
 #process.l1tMonitorEndPath = cms.EndPath(process.l1tMonitorEndPathSeq)
 
-process.l1tStage2MonitorClient.remove(process.l1TStage2uGMTQualityTests)
-process.l1tStage2MonitorClient.remove(process.l1TStage2EMTFQualityTests)
-process.l1tStage2MonitorClient.remove(process.l1TStage2BMTFQualityTests)
+#process.l1tStage2MonitorClient.remove(process.l1TStage2uGMTQualityTests)
+#process.l1tStage2MonitorClient.remove(process.l1TStage2EMTFQualityTests)
+#process.l1tStage2MonitorClient.remove(process.l1TStage2BMTFQualityTests)
 #--------------------------------------------------
 # Customize for other type of runs
 
