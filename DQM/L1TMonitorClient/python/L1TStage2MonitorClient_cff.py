@@ -32,7 +32,7 @@ from DQM.L1TMonitorClient.L1TStage2uGTClient_cff import *
 from DQM.L1TMonitorClient.L1TStage2EMTFQualityTests_cfi import *
 
 # L1 event info DQM client EMTF 
-from DQM.L1TMonitorClient.L1TEMTFEventInfoClient_cfi import *
+from DQM.L1TMonitorClient.L1TStage2EMTFEventInfoClient_cfi import *
 # define sequences 
 #
 
@@ -46,9 +46,7 @@ l1TStage2Clients = cms.Sequence(
                         )
 
 l1tStage2MonitorClient = cms.Sequence(
-                        l1TStage2QualityTests +
-                        l1TStage2Clients +
-                        l1TStage2EMTFQualityTests +
-                        l1tEMTFEventInfoClient
+                        l1TStage2QualityTests 
+                      + l1TStage2Clients 
                         )
 
