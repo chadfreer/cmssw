@@ -7,19 +7,18 @@ process = cms.Process("L1TStage2DQM", eras.Run2_2017)
 # Event Source and Condition
 
 # Live Online DQM in P5
-process.load("DQM.Integration.config.inputsource_cfi")
+#process.load("DQM.Integration.config.inputsource_cfi")
 
 # # Testing in lxplus
-# process.load("DQM.Integration.config.fileinputsource_cfi")
+process.load("DQM.Integration.config.fileinputsource_cfi")
 # process.load("FWCore.MessageLogger.MessageLogger_cfi")
 # process.MessageLogger.cerr.FwkReport.reportEvery = 1
 
 # Required to load Global Tag
-process.load("DQM.Integration.config.FrontierCondition_GT_cfi") 
-
-# # Condition for lxplus: change and possibly customise the GT
-# from Configuration.AlCa.GlobalTag import GlobalTag as gtCustomise
-# process.GlobalTag = gtCustomise(process.GlobalTag, 'auto:run2_data', '')
+#process.load("DQM.Integration.config.FrontierCondition_GT_cfi") 
+process.load("DQM.Integration.config.FrontierCondition_GT_autoExpress_cfi") # Condition for lxplus: change and possibly customise the GT
+from Configuration.AlCa.GlobalTag import GlobalTag as gtCustomise
+process.GlobalTag = gtCustomise(process.GlobalTag, 'auto:run2_data', '')
 
 # Required to load EcalMappingRecord
 process.load("Configuration.StandardSequences.GeometryRecoDB_cff")
