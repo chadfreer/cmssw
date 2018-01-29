@@ -870,7 +870,7 @@ float NoisyChannel::runTest(const MonitorElement *me)
               << me-> getFullname() << "\n";
 
   int nbins=0;
-  int nbinsX=0, nbinsY=0; 
+  //int nbinsX=0, nbinsY=0; 
   //-- TH1F
   if (me->kind()==MonitorElement::DQM_KIND_TH1F)
   { 
@@ -892,10 +892,10 @@ float NoisyChannel::runTest(const MonitorElement *me)
   //-- TH2
   else if (me->kind()==MonitorElement::DQM_KIND_TH2F)
   { 
-//    nbins = me->getTH2F()->GetXaxis()->GetNbins() *
-//            me->getTH2F()->GetYaxis()->GetNbins(); 
-    nbinsX = me->getTH2F()->GetXaxis()->GetNbins(); 
-    nbinsY = me->getTH2F()->GetYaxis()->GetNbins(); 
+    nbins = me->getTH2F()->GetXaxis()->GetNbins() *
+            me->getTH2F()->GetYaxis()->GetNbins(); 
+   //nbinsX = me->getTH2F()->GetXaxis()->GetNbins(); 
+   //nbinsY = me->getTH2F()->GetYaxis()->GetNbins(); 
     h  = me->getTH2F(); // access Test histo
   } 
   //-- TH2
@@ -930,12 +930,12 @@ float NoisyChannel::runTest(const MonitorElement *me)
   int first = 1;
   // do NOT use overflow bin
   int last  = nbins;
-  int lastX  = nbinsX, lastY  = nbinsY;
+  //int lastX  = nbinsX, lastY  = nbinsY;
   // bins outside Y-range
   int fail = 0;
   int bin;
-  int binX, binY;
-  if (nbinsY == 0) { 
+  //int binX, binY;
+  //if (nbinsY == 0) { 
     for (bin = first; bin <= last; ++bin)
     {
       double contents = h->GetBinContent(bin);
@@ -954,8 +954,8 @@ float NoisyChannel::runTest(const MonitorElement *me)
 
     // return fraction of bins that passed test
     return 1.*(nbins - fail)/nbins;
-    }
-  else { 
+    //}
+ /* else { 
     for (binY = first; binY <= lastY; ++binY) {
       for (binX = first; binX <= lastX; ++binX) {
         double contents = h->GetBinContent(binX, binY);
@@ -974,7 +974,7 @@ float NoisyChannel::runTest(const MonitorElement *me)
 
     // return fraction of bins that passed test
     return 1.*((nbinsX * nbinsY) - fail)/(nbinsX * nbinsY);
-  }
+  }*/
 }
 
 // get average for bin under consideration
@@ -1001,7 +1001,7 @@ double NoisyChannel::getAverage(int bin, const TH1 *h) const
   /// average is sum over the # of bins used
   return sum/(numNeighbors_ * 2);
 }
-
+/*
 double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const
 {
   /// do NOT use underflow bin
@@ -1056,7 +1056,7 @@ double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const
   return sum/((2*neighborsX + 1)*(2*neighborsY + 1) - 1);
 
 }
-
+*/
 //-----------------------------------------------------//
 //-----Content Sigma (Emma Yeager and Chad Freer)------//
 //----------------------------------------------------//
