@@ -894,8 +894,6 @@ float NoisyChannel::runTest(const MonitorElement *me)
   { 
     nbins = me->getTH2F()->GetXaxis()->GetNbins() *
             me->getTH2F()->GetYaxis()->GetNbins(); 
-   //nbinsX = me->getTH2F()->GetXaxis()->GetNbins(); 
-   //nbinsY = me->getTH2F()->GetYaxis()->GetNbins(); 
     h  = me->getTH2F(); // access Test histo
   } 
   //-- TH2
@@ -934,8 +932,7 @@ float NoisyChannel::runTest(const MonitorElement *me)
   // bins outside Y-range
   int fail = 0;
   int bin;
-  //int binX, binY;
-  //if (nbinsY == 0) { 
+ 
     for (bin = first; bin <= last; ++bin)
     {
       double contents = h->GetBinContent(bin);
@@ -951,112 +948,36 @@ float NoisyChannel::runTest(const MonitorElement *me)
         badChannels_.push_back(chan);
       }
     }
-
     // return fraction of bins that passed test
     return 1.*(nbins - fail)/nbins;
-    //}
- /* else { 
-    for (binY = first; binY <= lastY; ++binY) {
-      for (binX = first; binX <= lastX; ++binX) {
-        double contents = h->GetBinContent(binX, binY);
-        double average = getAverage2D(binX, binY, h);
-        bool failure = false;
-        if (average != 0)
-           failure = (((contents-average)/std::abs(average)) > tolerance_);
-        if (failure)
-        {
-          ++fail;
-          DQMChannel chan(binX, 0, 0, contents, h->GetBinError(binX));
-          badChannels_.push_back(chan);
-        }
-      }
-    }
-
-    // return fraction of bins that passed test
-    return 1.*((nbinsX * nbinsY) - fail)/(nbinsX * nbinsY);
-  }*/
 }
 
 // get average for bin under consideration
 // (see description of method setNumNeighbors)
 double NoisyChannel::getAverage(int bin, const TH1 *h) const
 {
-  /// do NOT use underflow bin
+  // do NOT use underflow bin
   int first = 1;
-  /// do NOT use overflow bin
+  // do NOT use overflow bin
   int ncx  = h->GetXaxis()->GetNbins();
   double sum = 0; int bin_low, bin_hi;
   for (unsigned i = 1; i <= numNeighbors_; ++i)
   {
-    /// use symmetric-to-bin bins to calculate average
+    // use symmetric-to-bin bins to calculate average
     bin_low = bin-i;  bin_hi = bin+i;
-    /// check if need to consider bins on other side of spectrum
-    /// (ie. if bins below 1 or above ncx)
+    // check if need to consider bins on other side of spectrum
+    // (ie. if bins below 1 or above ncx)
     while (bin_low < first) // shift bin by +ncx
       bin_low = ncx + bin_low;
     while (bin_hi > ncx) // shift bin by -ncx
       bin_hi = bin_hi - ncx;
     sum += h->GetBinContent(bin_low) + h->GetBinContent(bin_hi);
   }
-  /// average is sum over the # of bins used
+  // average is sum over the # of bins used
   return sum/(numNeighbors_ * 2);
 }
-/*
-double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const
-{
-  /// do NOT use underflow bin
-  int first = 1;
-  double sum = 0;
-  int ncx = h->GetXaxis()->GetNbins();
-  int ncy = h->GetYaxis()->GetNbins();
-  int bin_lowX, bin_hiX, bin_lowY, bin_hiY;
-  int neighborsX, neighborsY;
-  if (ncx%2 == 0) {
-    neighborsX = ncx/2 - 1; //set neighbors for no overlap
-  }
-  else { neighborsX = (ncx - 1)/2; } //set neighbors for no overlap
-  if (ncy%2 == 0) {
-    neighborsY = ncy/2 - 1; 
-  }
-  else { neighborsY = (ncy - 1)/2; }
 
-  for (int i = 0; i <= neighborsX; ++i) { //scan entire chamber
-    for (int j = 0; j <= neighborsY; ++j) { 
-			if (i == 0 && j == 0) continue;	
-      /// use symmetric-to-bin bins to calculate average
-      bin_lowX = binX-i;  bin_hiX = binX+i;
-      /// check if need to consider bins on other side of spectrum
-      /// (ie. if bins below 1 or above ncx)
-      while (bin_lowX < first) // shift bin by +ncx
-        bin_lowX = ncx + bin_lowX;
-      while (bin_hiX > ncx) // shift bin by -ncx
-        bin_hiX = bin_hiX - ncx;
 
-      bin_lowY = binY-j;  bin_hiY = binY+j;
-      while (bin_lowY < first) // shift bin by +ncy
-				bin_lowY = ncy + bin_lowY;
-      while (bin_hiY > ncy) // shift bin by -ncy
-       	bin_hiY = bin_hiY - ncy;
-			if (i == 0) {
-      	sum += h -> GetBinContent(binX, bin_lowY) + //sum upper and lower centered y sections
-	     	h -> GetBinContent(binX, bin_hiY);
-			}
-			else if (j == 0) {
-      	sum += h -> GetBinContent(bin_lowX, binY) + //sum left and right centered x sections
-	      h -> GetBinContent(bin_hiX, binY);
-			}
-			else {
-      	sum += h -> GetBinContent(bin_lowX, bin_lowY) + //sum each corner section
-	      h -> GetBinContent(bin_lowX, bin_hiY) + 
-	      h -> GetBinContent(bin_hiX, bin_lowY) +
-     	  h -> GetBinContent(bin_hiX, bin_hiY);     
-    	} 
-		}
-  }   /// average is sum over the # of bins used
-  return sum/((2*neighborsX + 1)*(2*neighborsY + 1) - 1);
-
-}
-*/
 //-----------------------------------------------------//
 //-----Content Sigma (Emma Yeager and Chad Freer)------//
 //----------------------------------------------------//
