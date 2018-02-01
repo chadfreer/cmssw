@@ -20,7 +20,7 @@ options.register(
 )
 
 options.register('runNumber',
-                 286520,
+                 297057,
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Run number. This run number has to be present in the dataset configured with the dataset option.")
@@ -59,7 +59,8 @@ except:
   if options.dataset == 'auto':
     print "Querying DAS for a dataset..."
     import subprocess
-    out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/*Express*/*/*FEVT*'" % options.runNumber, shell=True)
+    #out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/*Express*/*/*FEVT*'" % options.runNumber, shell=True)
+    out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/ZeroBias/Run2017B-v1/RAW'" % options.runNumber, shell=True)
     dataset = out.splitlines()[-1]
     print "Using dataset=%s." % dataset
   else:
@@ -90,7 +91,7 @@ print "Selected %d files and %d LS." % (len(readFiles), len(lumirange))
 
 source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles, lumisToProcess = lumirange)
 maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(100)
 )
 
 # Fix to allow scram to compile
