@@ -1010,50 +1010,46 @@ double NoisyChannel::getAverage2D(int binX, int binY, const TH1 *h) const
   int ncx = h->GetXaxis()->GetNbins();
   int ncy = h->GetYaxis()->GetNbins();
   int bin_lowX, bin_hiX, bin_lowY, bin_hiY;
-  int neighborsX, neighborsY;
-  if (ncx%2 == 0) {
-    neighborsX = ncx/2 - 1; //set neighbors for no overlap
-  }
-  else { neighborsX = (ncx - 1)/2; } //set neighbors for no overlap
-  if (ncy%2 == 0) {
-    neighborsY = ncy/2 - 1; 
-  }
-  else { neighborsY = (ncy - 1)/2; }
 
-  for (int i = 0; i <= neighborsX; ++i) { //scan entire chamber
+  int neighborsX, neighborsY;//convert unsigned input to int so we can use comparators
+  neighborsX = numNeighbors_;
+  neighborsY = numNeighbors_;
+
+  for (int i = 0; i <= neighborsX; ++i) { //scan entire chamber (except 1 for mod 2 histograms)
     for (int j = 0; j <= neighborsY; ++j) { 
-			if (i == 0 && j == 0) continue;	
-      /// use symmetric-to-bin bins to calculate average
-      bin_lowX = binX-i;  bin_hiX = binX+i;
-      /// check if need to consider bins on other side of spectrum
-      /// (ie. if bins below 1 or above ncx)
-      while (bin_lowX < first) // shift bin by +ncx
+      if (i == 0 && j == 0) continue;//skip test bin
+      bin_lowX = binX-i;  bin_hiX = binX+i; // use symmetric-to-bin bins to calculate average
+      // check if need to consider bins on other side of spectrum
+      // (ie. if bins below 1 or above ncx)
+      while (bin_lowX < first){ // shift bin by +ncx
         bin_lowX = ncx + bin_lowX;
-      while (bin_hiX > ncx) // shift bin by -ncx
+      }
+      while (bin_hiX > ncx){ // shift bin by -ncx
         bin_hiX = bin_hiX - ncx;
-
+      }
       bin_lowY = binY-j;  bin_hiY = binY+j;
-      while (bin_lowY < first) // shift bin by +ncy
-				bin_lowY = ncy + bin_lowY;
-      while (bin_hiY > ncy) // shift bin by -ncy
+      while (bin_lowY < first){ // shift bin by +ncy
+	bin_lowY = ncy + bin_lowY;
+      }
+      while (bin_hiY > ncy){ // shift bin by -ncy
        	bin_hiY = bin_hiY - ncy;
+      }
+
 			if (i == 0) {
-      	sum += h -> GetBinContent(binX, bin_lowY) + //sum upper and lower centered y sections
-	     	h -> GetBinContent(binX, bin_hiY);
-			}
-			else if (j == 0) {
-      	sum += h -> GetBinContent(bin_lowX, binY) + //sum left and right centered x sections
+       sum += h -> GetBinContent(binX, bin_lowY) + //sum upper and lower centered y sections
+	      h -> GetBinContent(binX, bin_hiY);
+			} else if (j == 0) {
+       sum += h -> GetBinContent(bin_lowX, binY) + //sum left and right centered x sections
 	      h -> GetBinContent(bin_hiX, binY);
-			}
-			else {
-      	sum += h -> GetBinContent(bin_lowX, bin_lowY) + //sum each corner section
+			} else {
+       sum += h -> GetBinContent(bin_lowX, bin_lowY) + //sum each corner section
 	      h -> GetBinContent(bin_lowX, bin_hiY) + 
 	      h -> GetBinContent(bin_hiX, bin_lowY) +
-     	  h -> GetBinContent(bin_hiX, bin_hiY);     
-    	} 
-		}
-  }   /// average is sum over the # of bins used
-  return sum/((2*neighborsX + 1)*(2*neighborsY + 1) - 1);
+     	      h -> GetBinContent(bin_hiX, bin_hiY);     
+    	} //end conditionals
+     } //end of j for loop
+  } //end of i for loop
+  return sum/((2*neighborsX + 1)*(2*neighborsY + 1) - 1); // average is sum over the # of bins used
 
 }
 
