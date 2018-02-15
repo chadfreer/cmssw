@@ -1,0 +1,9 @@
+
+<use name="L1Trigger/L1TMuonEndCap"/>
+<use name="MuonAnalysis/MuonAssociators"/>  <!-- For the RECO muon extrapolation -->
+<use name="root"/>
+
+<export>
+  <lib name="1"/>
+</export>
+<flags ADD_SUBDIR="1"/>  <!-- For the src/FlatNtupleBranches/ subdirectory -->

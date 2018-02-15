@@ -1,0 +1,8 @@
+<export>
+</export>
+<flags EDM_PLUGIN="1"/>
+<library   name="EMTFAnalyzerNTupleMaker_plugins" file="*.cc">
+  <use name="EMTFAnalyzer/NTupleMaker"/>
+  <use name="HLTrigger/HLTcore"/>
+  <use name="root"/>
+</library>
