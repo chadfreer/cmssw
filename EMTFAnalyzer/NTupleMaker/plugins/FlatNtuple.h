@@ -24,6 +24,7 @@
 #include "EMTFAnalyzer/NTupleMaker/interface/FlatNtupleBranches/EMTFUnpTrackInfo.h"
 #include "EMTFAnalyzer/NTupleMaker/interface/FlatNtupleBranches/RecoMuonInfo.h"
 #include "EMTFAnalyzer/NTupleMaker/interface/MatcherDR/RecoTrkMatcher.h"
+#include "EMTFAnalyzer/NTupleMaker/interface/FlatNtupleBranches/CSCSegInfo.h"
 
 // RECO muons
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
@@ -64,7 +65,7 @@ class FlatNtuple : public edm::EDAnalyzer {
   EMTFTrackInfo    emtfTrackInfo;
   EMTFUnpTrackInfo emtfUnpTrackInfo;
   RecoTrkMatcher   recoTrkMatcher;
- 
+  CSCSegInfo       cscSegInfo;
   // Output tree
   TTree * out_tree;
  
@@ -89,7 +90,8 @@ class FlatNtuple : public edm::EDAnalyzer {
   edm::EDGetTokenT<std::vector<l1t::EMTFHit>>      EMTFHit_token;
   edm::EDGetTokenT<std::vector<l1t::EMTFTrack>>    EMTFTrack_token;
   edm::EDGetTokenT<std::vector<l1t::EMTFTrack>>    EMTFUnpTrack_token;
- 
+  edm::EDGetTokenT<CSCSegmentCollection>           seg_token;
+
   PropagateToMuon muProp1st_;
   PropagateToMuon muProp2nd_;
 }; // End class FlatNtuple public edm::EDAnalyzer

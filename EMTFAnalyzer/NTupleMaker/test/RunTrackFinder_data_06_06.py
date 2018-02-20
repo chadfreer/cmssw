@@ -162,9 +162,9 @@ process.TFileService = cms.Service(
     "TFileService",
     # fileName = cms.string("EMTF_NTuple_ZMu_274442_emtfStage2Digis_1k.root")
     # fileName = cms.string("EMTF_NTuple_ZMu_275375_emtfStage2Digis_1k.root")
-    # fileName = cms.string("EMTF_NTuple_ZMu_276092_emtfStage2Digis_debug.root")
+     fileName = cms.string("EMTF_NTuple_ZMu_276092_emtfStage2Digis_debug.root")
     # fileName = cms.string("EMTF_NTuple_ZMu_276282_emtfStage2Digis_debug.root")
-    fileName = cms.string("EMTF_NTuple_highPt200MuonSkim_emtfStage2Digis_post_276215_outlierFix2_2016C_v2_02.root")
+    #fileName = cms.string("EMTF_NTuple_highPt200MuonSkim_emtfStage2Digis_post_276215_outlierFix2_2016C_v2_02.root")
     )
 
 # outCommands = cms.untracked.vstring('keep *')
@@ -183,9 +183,9 @@ outCommands = cms.untracked.vstring(
 process.out = cms.OutputModule("PoolOutputModule", 
                                # fileName = cms.untracked.string("EMTF_Tree_ZMu_274442_emtfStage2Digis_1k.root"),
                                # fileName = cms.untracked.string("EMTF_Tree_ZMu_275375_emtfStage2Digis_1k.root"),
-                               # fileName = cms.untracked.string("EMTF_Tree_ZMu_276092_emtfStage2Digis_debug.root"),
+                                fileName = cms.untracked.string("EMTF_Tree_ZMu_276092_emtfStage2Digis_debug.root"),
                                # fileName = cms.untracked.string("EMTF_Tree_ZMu_276282_emtfStage2Digis_debug.root"),
-                               fileName = cms.untracked.string("EMTF_Tree_highPt200MuonSkim_emtfStage2Digis_post_276215_outlierFix2_2016C_v2_02.root"),
+                               # fileName = cms.untracked.string("EMTF_Tree_highPt200MuonSkim_emtfStage2Digis_post_276215_outlierFix2_2016C_v2_02.root"),
                                outputCommands = outCommands
                                )
 

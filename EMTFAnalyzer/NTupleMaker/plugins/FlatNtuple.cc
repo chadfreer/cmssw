@@ -28,7 +28,7 @@ FlatNtuple::FlatNtuple(const edm::ParameterSet& iConfig):
   EMTFHit_token      = consumes<std::vector<l1t::EMTFHit>>   (iConfig.getParameter<edm::InputTag>("emtfHitTag"));
   EMTFTrack_token    = consumes<std::vector<l1t::EMTFTrack>> (iConfig.getParameter<edm::InputTag>("emtfTrackTag"));
   EMTFUnpTrack_token = consumes<std::vector<l1t::EMTFTrack>> (iConfig.getParameter<edm::InputTag>("emtfUnpTrackTag"));
-  
+  seg_token 	     = consumes<CSCSegmentCollection>        (iConfig.getParameter<edm::InputTag>("cscSegmentTag"));
 } // End FlatNtuple::FlatNtuple
 
 // Destructor
@@ -53,6 +53,9 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   edm::Handle<std::vector<l1t::EMTFTrack>> emtfUnpTracks;
   iEvent.getByToken(EMTFUnpTrack_token, emtfUnpTracks);
   
+  edm::Handle<CSCSegmentCollection> cscSeg;
+  iEvent.getByToken(seg_token, cscSeg);
+
   // Reset branch values
   eventInfo.Reset();
   genMuonInfo.Reset();
@@ -61,7 +64,8 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   emtfUnpTrackInfo.Reset();
   recoMuonInfo.Reset();
   recoTrkMatcher.Reset();
-  
+  cscSegInfo.Reset();  
+
   // std::cout << "About to fill event info" << std::endl;	
   // Fill event info
   eventInfo.Fill(iEvent);
@@ -280,6 +284,7 @@ void FlatNtuple::beginJob() {
   emtfUnpTrackInfo.Initialize();
   recoMuonInfo.Initialize();
   recoTrkMatcher.Initialize();
+  cscSegInfo.Initialize();
 	
   ////////////////////////////////////////////////
   ////   WARNING!!! CONSTRUCTION OF STRUCTS   ////
@@ -315,6 +320,10 @@ void FlatNtuple::beginJob() {
 
   for (auto & it : recoTrkMatcher.mVFlt)  out_tree->Branch(it.first, (std::vector<float>*) &it.second);
   for (auto & it : recoTrkMatcher.mVInt)  out_tree->Branch(it.first, (std::vector<int>*)   &it.second);
+
+  for (auto & it : cscSegInfo.mInts) out_tree->Branch(it.first, (int*) &it.second);
+  for (auto & it : cscSegInfo.mVFlt) out_tree->Branch(it.first, (std::vector<float>*) &it.second);
+  for (auto & it : cscSegInfo.mVInt) out_tree->Branch(it.first, (std::vector<int>*)   &it.second);  
 	
   if (not isMC) {
     for (auto & it : emtfUnpTrackInfo.mInts)  out_tree->Branch(it.first, (int*) &it.second);

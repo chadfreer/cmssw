@@ -18,6 +18,7 @@ FlatNtupleData = cms.EDAnalyzer('FlatNtuple',
                                 emtfHitTag    = cms.InputTag("simEmtfDigis"),
                                 emtfTrackTag  = cms.InputTag("simEmtfDigis"),
                                 emtfUnpTrackTag  = cms.InputTag("emtfStage2Digis"),
+				cscSegmentTag = cms.InputTag("cscSegments"),
 
                                 # RECO muon extrapolation to 1st station
                                 muProp1st = cms.PSet(
