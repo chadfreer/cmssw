@@ -264,6 +264,16 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     out_tree->Fill();
   }
   // std::cout << "All done with this event!\n" << std::endl;
+  //
+  //
+    for(CSCSegmentCollection::const_iterator dSiter=cscSeg->begin(); dSiter != cscSeg->end(); dSiter++) {
+      //recoMuonInfo.Fill( *mu, (*recoVertices)[0], muProp1st_, muProp2nd_, MIN_RECO_ETA, MAX_RECO_ETA );
+       cscSegInfo.Fill(dSiter);
+       //cscSegInfo.Fill(dSiter.cscDetId,dSiter.CSCSegment);
+    }
+
+
+
   return;
       
 } // End FlatNtuple::analyze
