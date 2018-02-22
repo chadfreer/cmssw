@@ -15,53 +15,35 @@ void CSCSegInfo::Reset() {
  // INSERT(mInts, "nSegsBX0", 0);
 }
 
-//void CSCSegInfo::Fill(const edm::Handle<CSCSegmentCollection> & cscSeg, std::vector<CSCRecHit2D> theCSCRecHits) {
-//void CSCSegInfo::Fill(const edm::Handle<CSCSegmentCollection> & cscSeg) {
 void CSCSegInfo::Fill(const CSCSegment cscSeg) {
-//void CSCSegInfo::Fill(const CSCSegment cscSeg) {
-//std::vector<CSCRecHit2D> theCSCRecHits
-  std::cout << "Filling CSCSegInfo" << "chi2" << (cscSeg).chi2() << std::endl;
+  //Set CSCDetId to get position of segment in detector
   CSCDetId id  = (CSCDetId)(cscSeg).cscDetId();
-
-
   INSERT(mInts, "nSegs", ACCESS(mInts, "nSegs") + 1 );
   //if (cscSeg.tbins() == 8) 
     //INSERT(mInts, "nSegsBX0", ACCESS(mInts, "nSegsBX0") + 1 );
-/*
-  INSERT(mVFlt, "seg_chi2",          CSCSegment().chi2() );
-  INSERT(mVFlt, "seg_time",          CSCSegment().time() );
-  INSERT(mVFlt, "seg_segx",          CSCSegment().localPosition().x() );
-  INSERT(mVFlt, "seg_segy",          CSCSegment().localPosition().y() );
-  INSERT(mVFlt, "seg_segDirx",       CSCSegment().localDirection().x() );
-  INSERT(mVFlt, "seg_segDiry",       CSCSegment().localDirection().y() );
-  //INSERT(mVFlt, "seg_segDirz",       CSCSegment().localDirection().z() );
 
-  INSERT(mVInt, "seg_endcap",        CSCDetId().endcap() );
-  INSERT(mVInt, "seg_ring",	     CSCDetId().ring() );
-  INSERT(mVInt, "seg_station",       CSCDetId().station() );
-  INSERT(mVInt, "seg_chamber",       CSCDetId().chamber() );
-  INSERT(mVInt, "seg_nRecHits",      CSCSegment().nRecHits() );
-  // std::cout << "Filled CSCSegInfo" << std::endl;
-*/
-
+/*//cout for testing
   std::cout     << "\n chi2" 		<< (cscSeg).chi2() 
 		<< "\n time" 		<< (cscSeg).time()
                 << "\n segx" 		<< (cscSeg).localPosition().x()
                 << "\n segy" 		<< (cscSeg).localPosition().y()
                 << "\n segDirx" 	<< (cscSeg).localDirection().x()
                 << "\n segDiry" 	<< (cscSeg).localDirection().y()
+                << "\n segDirz"         << (cscSeg).localDirection().z()
                 << "\n endcap" 		<< id.endcap()
                 << "\n ring" 		<< id.ring()
                 << "\n station" 	<< id.station()
                 << "\n chamber" 	<< id.chamber()
                 << "\n nRecHits" 	<< (cscSeg).nRecHits() 	
 			<< std::endl;
+*/
   INSERT(mVFlt, "seg_chi2",          (cscSeg).chi2() );
   INSERT(mVFlt, "seg_time",          (cscSeg).time() );
   INSERT(mVFlt, "seg_segx",          (cscSeg).localPosition().x() );
   INSERT(mVFlt, "seg_segy",          (cscSeg).localPosition().y() );
   INSERT(mVFlt, "seg_segDirx",       (cscSeg).localDirection().x() );
   INSERT(mVFlt, "seg_segDiry",       (cscSeg).localDirection().y() );
+  INSERT(mVFlt, "seg_segDirz",       (cscSeg).localDirection().z() );
 
   INSERT(mVInt, "seg_endcap",        id.endcap() );
   INSERT(mVInt, "seg_ring",          id.ring() );
