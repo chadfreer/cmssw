@@ -28,6 +28,7 @@ struct CSCSegInfo {
   void Reset();
   //void Fill(const edm::Handle<CSCSegmentCollection> & cscSeg, std::vector<CSCRecHit2D> theCSCRecHits);
   //void Fill(const edm::OwnVector<CSCSegment> & cscSeg);
+  //void Fill(const CSCSegment cscSeg);
   //void Fill(const edm::Handle<CSCSegmentCollection> & cscSeg);
   void Fill(const CSCSegment cscSeg);
 };

@@ -18,9 +18,10 @@ void CSCSegInfo::Reset() {
 //void CSCSegInfo::Fill(const edm::Handle<CSCSegmentCollection> & cscSeg, std::vector<CSCRecHit2D> theCSCRecHits) {
 //void CSCSegInfo::Fill(const edm::Handle<CSCSegmentCollection> & cscSeg) {
 void CSCSegInfo::Fill(const CSCSegment cscSeg) {
+//void CSCSegInfo::Fill(const CSCSegment cscSeg) {
 //std::vector<CSCRecHit2D> theCSCRecHits
-  // std::cout << "Filling CSCSegInfo" << std::endl;
-  CSCDetId id  = (CSCDetId)(*cscSeg).cscDetId();
+  std::cout << "Filling CSCSegInfo" << "chi2" << (cscSeg).chi2() << std::endl;
+  CSCDetId id  = (CSCDetId)(cscSeg).cscDetId();
 
 
   INSERT(mInts, "nSegs", ACCESS(mInts, "nSegs") + 1 );
@@ -43,19 +44,30 @@ void CSCSegInfo::Fill(const CSCSegment cscSeg) {
   // std::cout << "Filled CSCSegInfo" << std::endl;
 */
 
-
-  INSERT(mVFlt, "seg_chi2",          (*cscSeg).chi2() );
-  INSERT(mVFlt, "seg_time",          (*cscSeg).time() );
-  INSERT(mVFlt, "seg_segx",          (*cscSeg).localPosition().x() );
-  INSERT(mVFlt, "seg_segy",          (*cscSeg).localPosition().y() );
-  INSERT(mVFlt, "seg_segDirx",       (*cscSeg).localDirection().x() );
-  INSERT(mVFlt, "seg_segDiry",       (*cscSeg).localDirection().y() );
+  std::cout     << "\n chi2" 		<< (cscSeg).chi2() 
+		<< "\n time" 		<< (cscSeg).time()
+                << "\n segx" 		<< (cscSeg).localPosition().x()
+                << "\n segy" 		<< (cscSeg).localPosition().y()
+                << "\n segDirx" 	<< (cscSeg).localDirection().x()
+                << "\n segDiry" 	<< (cscSeg).localDirection().y()
+                << "\n endcap" 		<< id.endcap()
+                << "\n ring" 		<< id.ring()
+                << "\n station" 	<< id.station()
+                << "\n chamber" 	<< id.chamber()
+                << "\n nRecHits" 	<< (cscSeg).nRecHits() 	
+			<< std::endl;
+  INSERT(mVFlt, "seg_chi2",          (cscSeg).chi2() );
+  INSERT(mVFlt, "seg_time",          (cscSeg).time() );
+  INSERT(mVFlt, "seg_segx",          (cscSeg).localPosition().x() );
+  INSERT(mVFlt, "seg_segy",          (cscSeg).localPosition().y() );
+  INSERT(mVFlt, "seg_segDirx",       (cscSeg).localDirection().x() );
+  INSERT(mVFlt, "seg_segDiry",       (cscSeg).localDirection().y() );
 
   INSERT(mVInt, "seg_endcap",        id.endcap() );
   INSERT(mVInt, "seg_ring",          id.ring() );
   INSERT(mVInt, "seg_station",       id.station() );
   INSERT(mVInt, "seg_chamber",       id.chamber() );
-  INSERT(mVInt, "seg_nRecHits",      (*cscSeg).nRecHits() );
+  INSERT(mVInt, "seg_nRecHits",      (cscSeg).nRecHits() );
 
 
 } // End function: CSCSegInfo::Fill(const l1t::CSCSeg & cscSeg)
