@@ -114,6 +114,17 @@ TriggerPrimitive::TriggerPrimitive(const CSCDetId& detid,
     _id = CSCDetId(detid.endcap(), detid.station(), 4, detid.chamber(), detid.layer());
     _csc.strip = digi.getStrip() - 128;
   }
+
+  CSCCorrelatedLCTDigi digi_clone = digi; // Necessary to get around const qualifier
+  CSCALCTDigi alct = digi_clone.getALCT();
+  CSCCLCTDigi clct = digi_clone.getCLCT();
+  _csc.alct_quality     = alct.getQuality();
+  _csc.alct_accelerator = alct.getAccelerator();
+  _csc.alct_collision   = alct.getCollisionB();
+  _csc.clct_quality     = clct.getQuality();
+  _csc.clct_pattern     = clct.getPattern();
+  _csc.clct_bend        = clct.getBend();
+
 }
 
 

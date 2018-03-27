@@ -1,0 +1,56 @@
+
+#include "EMTFAnalyzer/NTupleMaker/interface/FlatNtupleBranches/CSCSegInfo.h"
+
+void CSCSegInfo::Initialize() {
+  for (auto & str : ints)  mInts .insert( std::pair<TString, int>(str, DINT) );
+  for (auto & str : vFlt)  mVFlt .insert( std::pair<TString, std::vector<float> >(str, DVFLT) );
+  for (auto & str : vInt)  mVInt .insert( std::pair<TString, std::vector<int> >  (str, DVINT) );
+}
+
+void CSCSegInfo::Reset() {
+  for (auto & it : mInts)  it.second = DINT;
+  for (auto & it : mVFlt)  it.second.clear();
+  for (auto & it : mVInt)  it.second.clear();
+  INSERT(mInts, "nSegs", 0);
+ // INSERT(mInts, "nSegsBX0", 0);
+}
+
+void CSCSegInfo::Fill(const CSCSegment cscSeg) {
+  //Set CSCDetId to get position of segment in detector
+  CSCDetId id  = (CSCDetId)(cscSeg).cscDetId();
+  INSERT(mInts, "nSegs", ACCESS(mInts, "nSegs") + 1 );
+  //if (cscSeg.tbins() == 8) 
+    //INSERT(mInts, "nSegsBX0", ACCESS(mInts, "nSegsBX0") + 1 );
+
+/*//cout for testing
+  std::cout     << "\n chi2" 		<< (cscSeg).chi2() 
+		<< "\n time" 		<< (cscSeg).time()
+                << "\n segx" 		<< (cscSeg).localPosition().x()
+                << "\n segy" 		<< (cscSeg).localPosition().y()
+                << "\n segDirx" 	<< (cscSeg).localDirection().x()
+                << "\n segDiry" 	<< (cscSeg).localDirection().y()
+                << "\n segDirz"         << (cscSeg).localDirection().z()
+                << "\n endcap" 		<< id.endcap()
+                << "\n ring" 		<< id.ring()
+                << "\n station" 	<< id.station()
+                << "\n chamber" 	<< id.chamber()
+                << "\n nRecHits" 	<< (cscSeg).nRecHits() 	
+			<< std::endl;
+*/
+  INSERT(mVFlt, "seg_chi2",          (cscSeg).chi2() );
+  INSERT(mVFlt, "seg_time",          (cscSeg).time() );
+  INSERT(mVFlt, "seg_segx",          (cscSeg).localPosition().x() );
+  INSERT(mVFlt, "seg_segy",          (cscSeg).localPosition().y() );
+  INSERT(mVFlt, "seg_segDirx",       (cscSeg).localDirection().x() );
+  INSERT(mVFlt, "seg_segDiry",       (cscSeg).localDirection().y() );
+  INSERT(mVFlt, "seg_segDirz",       (cscSeg).localDirection().z() );
+
+  INSERT(mVInt, "seg_endcap",        id.endcap() );
+  INSERT(mVInt, "seg_ring",          id.ring() );
+  INSERT(mVInt, "seg_station",       id.station() );
+  INSERT(mVInt, "seg_chamber",       id.chamber() );
+  INSERT(mVInt, "seg_nRecHits",      (cscSeg).nRecHits() );
+
+
+} // End function: CSCSegInfo::Fill(const l1t::CSCSeg & cscSeg)
+
