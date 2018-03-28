@@ -51,8 +51,7 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   edm::Handle<std::vector<l1t::EMTFTrack>> emtfTracks;
   iEvent.getByToken(EMTFTrack_token, emtfTracks);
   edm::Handle<std::vector<l1t::EMTFTrack>> emtfUnpTracks;
-  iEvent.getByToken(EMTFUnpTrack_token, emtfUnpTracks);
-  
+  iEvent.getByToken(EMTFUnpTrack_token, emtfUnpTracks); 
   edm::Handle<CSCSegmentCollection> cscSeg;
   iEvent.getByToken(seg_token, cscSeg);
 
@@ -65,6 +64,7 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   recoMuonInfo.Reset();
   recoTrkMatcher.Reset();
   cscSegInfo.Reset();  
+  lctSegMatcher.Reset();
 
   // std::cout << "About to fill event info" << std::endl;	
   // Fill event info
@@ -238,8 +238,13 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     } // End for (l1t::EMTFTrack emtfTrk: *emtfTracks)
   } // End for (uint i = 0; i < nTRK; i++)
 
-  recoTrkMatcher.Fill(recoMuonInfo, emtfTrackInfo, MIN_RECO_ETA, MAX_RECO_ETA);
+ // for(CSCSegmentCollection::const_iterator dSiter=cscSeg->begin(); dSiter != cscSeg->end(); dSiter++) {
+ //     lctSegMatcher.Fill(*dSiter,emtfHitInfo);
+ // }
 
+
+  recoTrkMatcher.Fill(recoMuonInfo, emtfTrackInfo, MIN_RECO_ETA, MAX_RECO_ETA);
+  lctSegMatcher.Fill(cscSegInfo, emtfHitInfo);
   // std::cout << "About to fill unpacked EMTF track branches" << std::endl;
 
   if (not isMC) {
@@ -261,8 +266,8 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
 
     for(CSCSegmentCollection::const_iterator dSiter=cscSeg->begin(); dSiter != cscSeg->end(); dSiter++) {
-      cscSegInfo.Fill(*dSiter);
-    }
+      cscSegInfo.Fill(*dSiter); 
+  }
 
   // std::cout << "About to fill output tree" << std::endl;
   if (passesSingleMu16 || true) { // No filter for now
@@ -291,6 +296,7 @@ void FlatNtuple::beginJob() {
   recoMuonInfo.Initialize();
   recoTrkMatcher.Initialize();
   cscSegInfo.Initialize();
+  lctSegMatcher.Initialize();
 	
   ////////////////////////////////////////////////
   ////   WARNING!!! CONSTRUCTION OF STRUCTS   ////
@@ -330,6 +336,10 @@ void FlatNtuple::beginJob() {
   for (auto & it : cscSegInfo.mInts) out_tree->Branch(it.first, (int*) &it.second);
   for (auto & it : cscSegInfo.mVFlt) out_tree->Branch(it.first, (std::vector<float>*) &it.second);
   for (auto & it : cscSegInfo.mVInt) out_tree->Branch(it.first, (std::vector<int>*)   &it.second);  
+
+  for (auto & it : lctSegMatcher.mInts) out_tree->Branch(it.first, (int*) &it.second);
+  for (auto & it : lctSegMatcher.mVFlt)  out_tree->Branch(it.first, (std::vector<float>*) &it.second);
+  for (auto & it : lctSegMatcher.mVInt)  out_tree->Branch(it.first, (std::vector<int>*)   &it.second);
 	
   if (not isMC) {
     for (auto & it : emtfUnpTrackInfo.mInts)  out_tree->Branch(it.first, (int*) &it.second);

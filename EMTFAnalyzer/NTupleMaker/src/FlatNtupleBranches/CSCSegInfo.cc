@@ -1,4 +1,10 @@
-
+/*Code to add segment information to branch
+ *Written by Chad Freer, March, 2018
+ *
+ * Uses CSCDetIds for location in detector, 
+ * segments for location and direction in chamber
+ * and rechits for strip and wire information
+*/
 #include "EMTFAnalyzer/NTupleMaker/interface/FlatNtupleBranches/CSCSegInfo.h"
 
 void CSCSegInfo::Initialize() {
@@ -44,13 +50,40 @@ void CSCSegInfo::Fill(const CSCSegment cscSeg) {
   INSERT(mVFlt, "seg_segDirx",       (cscSeg).localDirection().x() );
   INSERT(mVFlt, "seg_segDiry",       (cscSeg).localDirection().y() );
   INSERT(mVFlt, "seg_segDirz",       (cscSeg).localDirection().z() );
-
-  INSERT(mVInt, "seg_endcap",        id.endcap() );
+    
+  INSERT(mVInt, "seg_endcap",        id.zendcap() );
   INSERT(mVInt, "seg_ring",          id.ring() );
   INSERT(mVInt, "seg_station",       id.station() );
   INSERT(mVInt, "seg_chamber",       id.chamber() );
+    
+  INSERT(mVInt, "seg_triggerSector", id.triggerSector() );
+  INSERT(mVInt, "seg_triggerCscId",  id.triggerCscId() );
+  // INSERT(mVInt, "seg_wire_layer",    id.ilayer() );
+  // INSERT(mVInt, "seg_strip",         id.channel() );
+
   INSERT(mVInt, "seg_nRecHits",      (cscSeg).nRecHits() );
 
+  int wire_max=0;
+  int wire_min=1000;
+  int strip_max=0;
+  int strip_min=1000;
+  const std::vector<CSCRecHit2D> recHits = cscSeg.specificRecHits();
+  for (int iHit = 0; iHit < cscSeg.nRecHits(); iHit++) {
+     const CSCRecHit2D  recHit = recHits.at(iHit);
+     if (wire_max<recHit.hitWire()) wire_max=recHit.hitWire();
+     if (wire_min>recHit.hitWire()) wire_min=recHit.hitWire();
+     for (int i = 0; i < 3; i++){
+        if (strip_max<recHit.channels(i)) strip_max=recHit.channels(i);
+        if (strip_min>recHit.channels(i)) strip_min=recHit.channels(i);
+     }
+  }   
+
+  INSERT(mVInt, "seg_wire_max",        wire_max );
+  INSERT(mVInt, "seg_wire_min",        wire_min );
+  INSERT(mVInt, "seg_strip_max",       strip_max );
+  INSERT(mVInt, "seg_strip_min",       strip_min );
+      
+  //std::cout << "For hit " << iHit << ", wire = " << recHit.hitWire() << ", first strip = " << recHit.channels(0) << std::endl;  
 
 } // End function: CSCSegInfo::Fill(const l1t::CSCSeg & cscSeg)
 
