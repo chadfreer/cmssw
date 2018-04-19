@@ -63,9 +63,9 @@ void CSCSegInfo::Fill(const CSCSegment cscSeg) {
 
   INSERT(mVInt, "seg_nRecHits",      (cscSeg).nRecHits() );
 
-  int wire_max=0;
+  int wire_max=-1;
   int wire_min=1000;
-  int strip_max=0;
+  int strip_max=-1;
   int strip_min=1000;
   const std::vector<CSCRecHit2D> recHits = cscSeg.specificRecHits();
   for (int iHit = 0; iHit < cscSeg.nRecHits(); iHit++) {

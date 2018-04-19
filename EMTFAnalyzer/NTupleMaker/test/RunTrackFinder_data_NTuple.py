@@ -43,7 +43,7 @@ import FWCore.PythonUtilities.LumiList as LumiList
 
 ## Message Logger and Event range
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000000) )
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(False))
 
 process.options = cms.untracked.PSet(
@@ -86,7 +86,7 @@ in_dir_name = '/store/data/Run2017F/SingleMuon/RAW-RECO/ZMu-PromptReco-v1/000/30
 # in_dir_name = '/store/express/Commissioning2017/ExpressCosmics/FEVT/Express-v1/000/291/622/ 00000/'
 
 # ## ZeroBias, IsolatedBunch data
-# in_dir_name = '/store/data/Run2016H/ZeroBiasIsolatedBunch0/RAW/v1/000/282/650/00000/'
+ #in_dir_name = '/store/data/Run2016H/ZeroBiasIsolatedBunch0/RAW/v1/000/282/650/00000/'
 
 # ## SingleMu, Z-->mumu, high pT RECO muon
 # in_dir_name = '/store/group/dpg_trigger/comm_trigger/L1Trigger/Data/Collisions/SingleMuon/Skims/200-pt-muon-skim_from-zmumu-skim-cmssw-8013/SingleMuon/'

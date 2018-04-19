@@ -242,6 +242,9 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
  //     lctSegMatcher.Fill(*dSiter,emtfHitInfo);
  // }
 
+    for(CSCSegmentCollection::const_iterator dSiter=cscSeg->begin(); dSiter != cscSeg->end(); dSiter++) {
+      cscSegInfo.Fill(*dSiter);
+  }
 
   recoTrkMatcher.Fill(recoMuonInfo, emtfTrackInfo, MIN_RECO_ETA, MAX_RECO_ETA);
   lctSegMatcher.Fill(cscSegInfo, emtfHitInfo);
@@ -265,9 +268,9 @@ void FlatNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
   
 
-    for(CSCSegmentCollection::const_iterator dSiter=cscSeg->begin(); dSiter != cscSeg->end(); dSiter++) {
-      cscSegInfo.Fill(*dSiter); 
-  }
+//    for(CSCSegmentCollection::const_iterator dSiter=cscSeg->begin(); dSiter != cscSeg->end(); dSiter++) {
+//      cscSegInfo.Fill(*dSiter); 
+//  }
 
   // std::cout << "About to fill output tree" << std::endl;
   if (passesSingleMu16 || true) { // No filter for now

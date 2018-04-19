@@ -23,173 +23,120 @@ void LCTSegMatcher::Reset() {
   for (auto & it : mVFlt)  it.second.clear();
   for (auto & it : mVInt)  it.second.clear();
   INSERT(mInts, "numFills", 0);
+  INSERT(mInts, "numMatched", 0);
+  INSERT(mInts, "numSegMatched", 0);
+  INSERT(mInts, "numLCTMatched", 0);
 }
 
-void LCTSegMatcher::Fill(const CSCSegInfo & cscSeg, const EMTFHitInfo & emtfHits) {
+void LCTSegMatcher::Fill(CSCSegInfo & cscSeg, EMTFHitInfo & emtfHits) {
 
-  //simple counter
-  INSERT(mInts, "numFills", ACCESS(mInts, "numFills") + 1 ); 
-std::cout << "I am here!!!" << std::endl;
-/*
-  std::vector<int> result(n1, -1);
-  std::vector<float> seg_eta_St2(n1, NOMATCH);
-  std::vector<float> seg_phi_St2(n1, NOMATCH);
-  std::vector<float> seg_eta_St1(n1, NOMATCH);
-  std::vector<float> seg_phi_St1(n1, NOMATCH);
-  std::vector<float> segEta(n1, NOMATCH);
-  std::vector<float> segPhi(n1, NOMATCH);
-  std::vector<float> hitEta(n2, NOMATCH);
-  std::vector<float> hitPhi(n2, NOMATCH);
-  std::vector<std::vector<float> > deltaRMatrix(n1, std::vector<float>(n2, NOMATCH));
-  std::vector<std::vector<float> > deltaEtaMatrix(n1, std::vector<float>(n2, NOMATCH));
-  std::vector<std::vector<float> > deltaPhiMatrix(n1, std::vector<float>(n2, NOMATCH));
-*/  
   //prepare variables for loops over segments/LCTs
-  const float NOMATCH = -999.;
   const int n1 = ACCESS(cscSeg.mInts, "nSegs");
   const int n2 = ACCESS(emtfHits.mInts, "nHits");
+  
+  std::cout << "nsegs:   " << n1 << "    nLCTs:     " << n2 << std::endl;
 
-    std::cout << "nsegs:   " << n1 << "    nLCTs:     " << n2 << std::endl;
+  for (int i = 0; i < n1; i++){   //loop over segments
+    INSERT(cscSeg.mVInt, "seg_match_iLCT", DINT); // Pushes back default integer value
+  }
 
-  for (int i = 0; i < 10; i++){   //loop over segments
-    for (int j = 0; j < 10; j++) {//loop over LCTs
+  for (int j = 0; j < n2; j++) {//loop over LCTs
+          //if (ACCESS(emtfHits.mVInt, "hit_isCSC").at(j) != 1) continue;//prevent RPC
+          INSERT(emtfHits.mVInt, "hit_match_iSeg", DINT); // Pushes back default integer value
+  }
 
-    std::cout << "I am still here mawfucka!!!" << std::endl;
 
-      //define the segments vs the LCTs to allow for quick comparisons      
-      //std::vector<float> * iseg = &(cscSegs.mVFlt);
-      //std::vector<float> * ihit = &(emtfHits.mVFlt);
+  for (int i = 0; i < n1; i++){   //loop over segments
+    for (int j = 0; j < n2; j++) {//loop over LCTs
 
-      std::cout << "so far I am unmatched:(" << std::endl;
+      if (ACCESS(emtfHits.mVInt, "hit_isCSC").at(j) != 1) continue;//prevent RPC
 
       //Check to see if the segment and LCT are in the same endcap (EMTFHit:endcap-->+/-1,CSCDetId:zendcap-->+/-1)
-      //int seg_endcap = ACCESS(*iseg, "seg_endcap").at(i);
-      //int LCT_endcap = ACCESS(*ihit, "hit_endcap").at(j);
-      //if (seg_endcap != LCT_endcap) continue;
-
-      std::cout << "1" << std::endl;
+      int seg_endcap = ACCESS(cscSeg.mVInt, "seg_endcap").at(i);
+      int LCT_endcap = ACCESS(emtfHits.mVInt, "hit_endcap").at(j);
+      if (seg_endcap != LCT_endcap) continue;
 
       //Check to see if the segment and LCT are in the same station (EMTFHit:station-->1-4,CSCDetId:station-->1-4)
       int seg_station = ACCESS(cscSeg.mVInt, "seg_station").at(i);
       int LCT_station = ACCESS(emtfHits.mVInt, "hit_station").at(j);
       if (seg_station != LCT_station) continue;
 
-      std::cout << "2" << std::endl;
-
       //Check to see if the segment and LCT are in the same Ring (EMTFHit:ring-->1-4,CSCDetId:ring-->1-4)
       int seg_ring = ACCESS(cscSeg.mVInt, "seg_ring").at(i);
       int LCT_ring = ACCESS(emtfHits.mVInt, "hit_ring").at(j);
       if (seg_ring != LCT_ring) continue;
 
-      std::cout << "3" << std::endl;
-
       //Check to see if the segment and LCT are in the same Chamber (EMTFHit:chamber-->1-36,CSCDetId:chamber-->1-36)
       int seg_chamber = ACCESS(cscSeg.mVInt, "seg_chamber").at(i);
       int LCT_chamber = ACCESS(emtfHits.mVInt, "hit_chamber").at(j);
       if (seg_chamber != LCT_chamber) continue;
-    
-      std::cout << "so far I have matched!!" << std::endl;
-      
+ 
+      //grab segment strip and wire information 
+      int Segment_strip_min = ACCESS(cscSeg.mVInt, "seg_strip_min").at(i) * 2;//convert to units of halfstrips
+      int Segment_strip_max = ACCESS(cscSeg.mVInt, "seg_strip_max").at(i) * 2;//convert to units of halfstrips
+      int Segment_wire_min = ACCESS(cscSeg.mVInt, "seg_wire_min").at(i);
+      int Segment_wire_max = ACCESS(cscSeg.mVInt, "seg_wire_max").at(i);
+
+      //Now find the LCT strip and wire information for potential matches
+      int LCT_strip = ACCESS(emtfHits.mVInt, "hit_strip").at(j) + 2;//shift one full strip     
+      int LCT_wire = ACCESS(emtfHits.mVInt, "hit_wire").at(j) + 1; //Shifted because LCT starts counting at 0
+
+      //Nice for printouts.(comment out if desired)
+      int nRecHits = ACCESS(cscSeg.mVInt, "seg_nRecHits").at(i);
+      std::cout << "\nnumber of Rechits:" << nRecHits   << std::endl;
+      std::cout << "Segment strip:" << Segment_strip_min << "-" << Segment_strip_max << "     LCT strip:" << LCT_strip  << std::endl;
+      std::cout << "Segment wire:" << Segment_wire_min << "-" << Segment_wire_max << "        LCT wire:" << LCT_wire  << "\n" << std::endl;
+
+
+      //simple counter
+      INSERT(mInts, "numFills", ACCESS(mInts, "numFills") + 1 ); 
+      //Now start the meat of matching code. Check to see if it is within 2 of strips and wires
+      if (LCT_strip > Segment_strip_min-2 && LCT_strip < Segment_strip_max + 2){
+         if (LCT_wire > Segment_wire_min-2 && LCT_wire < Segment_wire_max + 2){
+           
+            INSERT(mInts, "numMatched", ACCESS(mInts, "numMatched") + 1 );
+            std::cout << "We have a full match, segment index " << i << " to LCT index " << j << "!" << std::endl;
+
+            //check for double matching (Need to check for neighbor LCTs)
+            if (ACCESS(cscSeg.mVInt, "seg_match_iLCT").at(i) >= 0) {
+              INSERT(mInts, "numLCTMatched", ACCESS(mInts, "numLCTMatched") + 1 );
+              std::cout << "But segment already had a match with index " << ACCESS(cscSeg.mVInt, "seg_match_iLCT").at(i) << "!!!" << std::endl;
+              int l = ACCESS(cscSeg.mVInt, "seg_match_iLCT").at(i); //old index
+              //Match both LCTs to the segment index but the segment index only to the non-neighbor index
+              if (ACCESS(emtfHits.mVInt, "hit_neighbor").at(l) == 1) {//The old match is a neighbor hit
+                  INSERT(cscSeg.mVInt, "seg_match_iLCT", i, j); //sets the index to new LCT index
+                  INSERT(emtfHits.mVInt, "hit_match_iSeg", j, i);
+              }
+              if (ACCESS(emtfHits.mVInt, "hit_neighbor").at(j) == 1) {//the new match is a neighbor hit
+                  INSERT(emtfHits.mVInt, "hit_match_iSeg", j, i);//only set LCT to match segment and not segment to match LCT              
+              }
+
+            //check for double matching
+            } else if (ACCESS(emtfHits.mVInt, "hit_match_iSeg").at(j) >= 0) {
+              INSERT(mInts, "numSegMatched", ACCESS(mInts, "numSegMatched") + 1 );
+      	      std::cout << "But LCT already had a match with index " << ACCESS(emtfHits.mVInt, "hit_match_iSeg").at(j) << "!!!" << std::endl;
+              int k = ACCESS(emtfHits.mVInt, "hit_match_iSeg").at(j);              
+              
+              //check which segment has the most rechits and keep that one
+              if (ACCESS(cscSeg.mVInt, "seg_nRecHits").at(i)>(ACCESS(cscSeg.mVInt, "seg_nRecHits").at(k))){
+                 INSERT(cscSeg.mVInt, "seg_match_iLCT", k, DINT); // Removes old match with less rechits
+                 INSERT(cscSeg.mVInt, "seg_match_iLCT", i, j); // Sets i^th  value in vector to j
+                 INSERT(emtfHits.mVInt, "hit_match_iSeg", j, i); // Sets j^th value in vector to i
+
+              }
+            } else {//if no double mathing then we save the indices
+                INSERT(cscSeg.mVInt, "seg_match_iLCT", i, j); // Sets i^th  value in vector to j
+                INSERT(emtfHits.mVInt, "hit_match_iSeg", j, i); // Sets j^th value in vector to i
+            }
+         }
+      }
+      //placeholder variables
       float s_time = ACCESS(cscSeg.mVFlt, "seg_time").at(i);
-      int s_nRecHits = ACCESS(cscSeg.mVInt, "seg_nRecHits").at(i);
 
       INSERT(mVFlt, "segment_time", s_time);
-      INSERT(mVInt, "segment_nRecHits", s_nRecHits);
 
     }//end j loop
+    
   }//end i loop 
 
-
-/*
-  for (int i = 0; i < n1; i++){
-    for (int j = 0; j < n2; j++) {
-	    
-      //Use reco mu extrapolated coordinates
-      const std::map<TString, std::vector<float> > * iseg = &(cscSegs.mVFlt);
-      const std::map<TString, std::vector<float> > * ihit = &(emtfHits.mVFlt);
-      reco_eta_St2[i] = ACCESS(*imu, "reco_eta_St2").at(i);
-      reco_phi_St2[i] = ACCESS(*imu, "reco_phi_St2").at(i);
-      reco_eta_St1[i] = ACCESS(*imu, "reco_eta_St1").at(i);
-      reco_phi_St1[i] = ACCESS(*imu, "reco_phi_St1").at(i);
-      //reco_eta_St2[i] = ACCESS(recoMuons.mVFlt, "reco_eta_St2").at(i);
-      //reco_phi_St2[i] = ACCESS(recoMuons.mVFlt, "reco_phi_St2").at(i);
-      //reco_eta_St1[i] = ACCESS(recoMuons.mVFlt, "reco_eta_St1").at(i);
-      //reco_phi_St1[i] = ACCESS(recoMuons.mVFlt, "reco_phi_St1").at(i);
-      trkEta[j] = ACCESS(*itrk, "trk_eta").at(j);
-      trkPhi[j] = ACCESS(*itrk, "trk_phi").at(j);
-      //trkEta[j] = ACCESS(emtfTrks.mVFlt, "trk_eta").at(j);
-      //trkPhi[j] = ACCESS(emtfTrks.mVFlt, "trk_phi").at(j);
-	    
-      //2nd station higher priority    
-      if(  fabs(reco_eta_St2[i] ) < max_eta && fabs(reco_eta_St2[i]) > min_eta
-        && fabs(reco_phi_St2[i]*TMath::Pi()/180.) < TMath::Pi() 
-	&& fabs(reco_phi_St2[i]*TMath::Pi()/180.) > -1.0*TMath::Pi() ){
-	      recoEta[i] = reco_eta_St2[i];
-	      recoPhi[i] = reco_phi_St2[i]*TMath::Pi()/180.;
-      }
-      else{
-	      recoEta[i] = reco_eta_St1[i];
-	      recoPhi[i] = reco_phi_St1[i]*TMath::Pi()/180.;
-      }
-     
-      deltaEtaMatrix[i][j] = recoEta[i]-trkEta[j];
-      deltaPhiMatrix[i][j] = recoPhi[i]-trkPhi[j]*TMath::Pi()/180.;
-      deltaRMatrix[i][j] = sqrt( pow(deltaEtaMatrix[i][j],2) + pow(deltaPhiMatrix[i][j],2) );
-    }//end for i
-  }//end for j
-  
-*/
-
-/*
-  // Run through the matrix n1 times to make sure we've found all matches.
-  for (int k = 0; k < n1; k++) {
-    int i_min = -1;
-    int j_min = -1;
-    float minDeltaR = -1.0*NOMATCH;
-    // find the smallest deltaR b/t reco muons and trks
-    for      if(  fabs(reco_eta_St2[i] ) < max_eta && fabs(reco_eta_St2[i]) > min_eta
-        && fabs(reco_phi_St2[i]*TMath::Pi()/180.) < TMath::Pi()
-        && fabs(reco_phi_St2[i]*TMath::Pi()/180.) > -1.0*TMath::Pi() ){
-              recoEta[i] = reco_eta_St2[i];
-              recoPhi[i] = reco_phi_St2[i]*TMath::Pi()/180.;
-      }
-      else{
-              recoEta[i] = reco_eta_St1[i];
-              recoPhi[i] = reco_phi_St1[i]*TMath::Pi()/180.;
-      }
-
-      deltaEtaMatrix[i][j] = recoEta[i]-trkEta[j];
-      deltaPhiMatrix[i][j] = recoPhi[i]-trkPhi[j]*TMath::Pi()/180.;
-      deltaRMatrix[i][j] = sqrt( pow(deltaEtaMatrix[i][j],2) + pow(deltaPhiMatrix[i][j],2) ); (int i = 0; i < n1; i++){
-      for (int j = 0; j < n2; j++){
-	if (deltaRMatrix[i][j] < minDeltaR) {
-	  i_min = i;
-	  j_min = j;
-	  minDeltaR = deltaRMatrix[i][j];
-	}
-      }
-    }
-	  
-    //removed matched pairs
-    if (minDeltaR < -1.0*NOMATCH) {
-      result[i_min] = j_min;
-      deltaRMatrix[i_min] = std::vector<float>(n2, NOMATCH);
-      for (int i = 0; i < n1; i++) deltaRMatrix[i][j_min] = NOMATCH;
-    }
-  }//end for k
-  
-  for (int k = 0; k < n1; k++) {
-	  if(result[k]!=-1){
-		  INSERT(mVFlt, "reco_match_trk_dPhi", deltaPhiMatrix[k][result[k]]);
-                  INSERT(mVFlt, "reco_match_trk_dEta", deltaEtaMatrix[k][result[k]]);
-	          INSERT(mVFlt, "reco_match_trk_dR", sqrt( pow(deltaEtaMatrix[k][result[k]],2) + pow(deltaPhiMatrix[k][result[k]],2) ) );       
-	  }
-	  else{//didn't find a match
-		  INSERT(mVFlt, "reco_match_trk_dPhi", NOMATCH);
-                  INSERT(mVFlt, "reco_match_trk_dEta", NOMATCH);
-	          INSERT(mVFlt, "reco_match_trk_dR", NOMATCH);
-	  }
-	  INSERT(mVInt, "reco_match_iTrk", result[k]); 
-  }
-  */
 }//end Fill

@@ -36,9 +36,19 @@ inline void INSERT(std::map<TString, std::vector<float> > & iMap, const TString 
   catch (const std::exception& e) { std::cout << "\n\nINSERT: No matching 'std::vector<float>' element found for string: '" << iStr << "' - code will break\n\n" << std::endl;
     iMap.at(iStr).push_back(iFlt); }
 };
+inline void INSERT(std::map<TString, std::vector<float> > & iMap, const TString iStr, const int idx, const float iFlt) {
+  try { iMap.at(iStr).at(idx) = iFlt; }
+  catch (const std::exception& e) { std::cout << "\n\nINSERT: No matching 'float' element found for string: '" << iStr << "' at index " << idx << " - code will break\n\n" << std::endl;
+    iMap.at(iStr).push_back(iFlt); }
+};
 inline void INSERT(std::map<TString, std::vector<int> > & iMap, const TString iStr, const int iInt) {
   try { iMap.at(iStr).push_back(iInt); }
   catch (const std::exception& e) { std::cout << "\n\nINSERT: No matching 'std::vector<int>' element found for string: '" << iStr << "' - code will break\n\n" << std::endl;
+    iMap.at(iStr).push_back(iInt); }
+};
+inline void INSERT(std::map<TString, std::vector<int> > & iMap, const TString iStr, const int idx, const int iInt) {
+  try { iMap.at(iStr).at(idx) = iInt; }
+  catch (const std::exception& e) { std::cout << "\n\nINSERT: No matching 'int' element found for string: '" << iStr << "' at index " << idx << " - code will break\n\n" << std::endl;
     iMap.at(iStr).push_back(iInt); }
 };
 inline void INSERT(std::map<TString, std::vector<std::vector<int> > > & iMap, const TString iStr, const std::vector<int> iVInt) {

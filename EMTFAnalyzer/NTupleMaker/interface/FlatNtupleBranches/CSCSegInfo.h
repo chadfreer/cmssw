@@ -17,7 +17,7 @@
 struct CSCSegInfo {
   std::vector<TString> ints = {{"nSegs"}};
   std::vector<TString> vFlt = {{"seg_chi2", "seg_time", "seg_segx", "seg_segy", "seg_segDirx", "seg_segDiry", "seg_segDirz"}};
-  std::vector<TString> vInt = {{"seg_endcap", "seg_ring", "seg_station", "seg_chamber", "seg_triggerSector", "seg_triggerCscId", "seg_nRecHits", "seg_wire_max", "seg_wire_min", "seg_strip_max", "seg_strip_min"}};
+  std::vector<TString> vInt = {{"seg_endcap", "seg_ring", "seg_station", "seg_chamber", "seg_triggerSector", "seg_triggerCscId", "seg_nRecHits", "seg_wire_max", "seg_wire_min", "seg_strip_max", "seg_strip_min", "seg_match_iLCT"}};
   std::map<TString, int> mInts;
   std::map<TString, std::vector<float> > mVFlt;
   std::map<TString, std::vector<int> > mVInt;
