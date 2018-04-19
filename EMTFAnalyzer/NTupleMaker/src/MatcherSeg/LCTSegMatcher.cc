@@ -75,6 +75,7 @@ void LCTSegMatcher::Fill(CSCSegInfo & cscSeg, EMTFHitInfo & emtfHits) {
       int Segment_strip_max = ACCESS(cscSeg.mVInt, "seg_strip_max").at(i) * 2;//convert to units of halfstrips
       int Segment_wire_min = ACCESS(cscSeg.mVInt, "seg_wire_min").at(i);
       int Segment_wire_max = ACCESS(cscSeg.mVInt, "seg_wire_max").at(i);
+      if ((Segment_strip_max-Segment_strip_min) > 24)continue;//stop weird trip issue (why does this happen?!)
 
       //Now find the LCT strip and wire information for potential matches
       int LCT_strip = ACCESS(emtfHits.mVInt, "hit_strip").at(j) + 2;//shift one full strip     
