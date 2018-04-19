@@ -16,8 +16,8 @@
 
 struct LCTSegMatcher {
   std::vector<TString> ints = {{"numFills","numSegMatched","numLCTMatched","numMatched"}};
-  std::vector<TString> vFlt = {{"segment_time"}};
-  std::vector<TString> vInt = {{"seg_LCT_matched"}};
+  //std::vector<TString> vFlt = {{}};
+  //std::vector<TString> vInt = {{}};
   std::map<TString, int> mInts;
   std::map<TString, std::vector<float> > mVFlt;
   std::map<TString, std::vector<int> > mVInt;

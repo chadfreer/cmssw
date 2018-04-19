@@ -14,14 +14,14 @@
 
 void LCTSegMatcher::Initialize() {
   for (auto & str : ints)  mInts .insert( std::pair<TString, int>(str, DINT) );
-  for (auto & str : vFlt)  mVFlt .insert( std::pair<TString, std::vector<float> >(str, DVFLT) );
-  for (auto & str : vInt)  mVInt .insert( std::pair<TString, std::vector<int> >  (str, DVINT) );
+  //for (auto & str : vFlt)  mVFlt .insert( std::pair<TString, std::vector<float> >(str, DVFLT) );
+  //for (auto & str : vInt)  mVInt .insert( std::pair<TString, std::vector<int> >  (str, DVINT) );
 }
 
 void LCTSegMatcher::Reset() {
   for (auto & it : mInts)  it.second = DINT;
-  for (auto & it : mVFlt)  it.second.clear();
-  for (auto & it : mVInt)  it.second.clear();
+  //for (auto & it : mVFlt)  it.second.clear();
+  //for (auto & it : mVInt)  it.second.clear();
   INSERT(mInts, "numFills", 0);
   INSERT(mInts, "numMatched", 0);
   INSERT(mInts, "numSegMatched", 0);
@@ -41,7 +41,6 @@ void LCTSegMatcher::Fill(CSCSegInfo & cscSeg, EMTFHitInfo & emtfHits) {
   }
 
   for (int j = 0; j < n2; j++) {//loop over LCTs
-          //if (ACCESS(emtfHits.mVInt, "hit_isCSC").at(j) != 1) continue;//prevent RPC
           INSERT(emtfHits.mVInt, "hit_match_iSeg", DINT); // Pushes back default integer value
   }
 
@@ -127,13 +126,11 @@ void LCTSegMatcher::Fill(CSCSegInfo & cscSeg, EMTFHitInfo & emtfHits) {
             } else {//if no double mathing then we save the indices
                 INSERT(cscSeg.mVInt, "seg_match_iLCT", i, j); // Sets i^th  value in vector to j
                 INSERT(emtfHits.mVInt, "hit_match_iSeg", j, i); // Sets j^th value in vector to i
-            }
-         }
-      }
-      //placeholder variables
-      float s_time = ACCESS(cscSeg.mVFlt, "seg_time").at(i);
+            }//end double matching checks
 
-      INSERT(mVFlt, "segment_time", s_time);
+         }//end wire conditional
+
+      }//end strip conditional
 
     }//end j loop
     
