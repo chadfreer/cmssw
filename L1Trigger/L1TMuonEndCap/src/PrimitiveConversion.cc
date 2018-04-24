@@ -153,6 +153,13 @@ void PrimitiveConversion::convert_csc(
   conv_hit.set_pattern     ( tp_data.pattern );
   conv_hit.set_bend        ( tp_data.bend );
 
+  conv_hit.set_alct_quality ( tp_data.alct_quality );
+  conv_hit.set_alct_accel   ( tp_data.alct_accelerator );
+  conv_hit.set_alct_collis  ( tp_data.alct_collision );
+  conv_hit.set_clct_quality ( tp_data.clct_quality );
+  conv_hit.set_clct_pattern ( tp_data.clct_pattern );
+  conv_hit.set_clct_bend    ( tp_data.clct_bend );
+
   conv_hit.set_neighbor    ( is_neighbor );
   conv_hit.set_sector_idx  ( (endcap_ == 1) ? sector_ - 1 : sector_ + 5 );
 
