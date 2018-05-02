@@ -20,7 +20,7 @@ options.register(
 )
 
 options.register('runNumber',
-                 286520,
+                 315107,
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Run number. This run number has to be present in the dataset configured with the dataset option.")
@@ -59,7 +59,7 @@ except:
   if options.dataset == 'auto':
     print "Querying DAS for a dataset..."
     import subprocess
-    out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/*Express*/*/*FEVT*'" % options.runNumber, shell=True)
+    out = subprocess.check_output("das_client --query 'dataset run=%d dataset=/*ZeroBias3*/Commissioning2018-PromptReco*/*'" % options.runNumber, shell=True)
     dataset = out.splitlines()[-1]
     print "Using dataset=%s." % dataset
   else:
