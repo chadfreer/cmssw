@@ -20,7 +20,7 @@ options.register(
 )
 
 options.register('runNumber',
-                 286520,
+                 307082,
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Run number. This run number has to be present in the dataset configured with the dataset option.")
@@ -90,7 +90,7 @@ print "Selected %d files and %d LS." % (len(readFiles), len(lumirange))
 
 source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles, lumisToProcess = lumirange)
 maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(10000)
 )
 
 # Fix to allow scram to compile
