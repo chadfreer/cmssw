@@ -58,11 +58,26 @@
 
 #include "ReadNtuple.h"
 
-static TString axis="Number of Segments per event";
 const int MAX_FILES = 10;   // Max number of files to process
 const int MAX_EVT   = 2000000;   // Max number of events to process
 const int PRT_EVT   =  100;   // Print every N events
 const bool verbose  = false; // Print information about the event and RECO and L1T muons
+
+//for making plots
+static TString xaxis="Segment #chi^{2}";
+static TString yaxis="Entries";
+
+TFile *fout = new TFile("MacroPlotter.root","RECREATE");
+TH1F *h11 = new TH1F ("h11",xaxis,50,0,50);
+TH1F *h12 = new TH1F ("h12",xaxis,50,0,50);
+TH1F *h21 = new TH1F ("h21",xaxis,50,0,50);
+TH1F *h22 = new TH1F ("h22",xaxis,50,0,50);
+TH1F *h31 = new TH1F ("h31",xaxis,50,0,50);
+TH1F *h32 = new TH1F ("h32",xaxis,50,0,50);
+TH1F *h41 = new TH1F ("h41",xaxis,50,0,50);
+TH1F *h42 = new TH1F ("h42",xaxis,50,0,50);
+
+double bendx = 0.0;
 
 void Plotter(){
 
@@ -89,18 +104,96 @@ void Plotter(){
         if (F("reco_pt",iRecoTrk) < 22) continue;
         if (I("reco_match_iTrk", iRecoTrk) < 0 ) continue;						//Take only matched reco muons
         int track_index = I("reco_match_iTrk", iRecoTrk);
+        std::cout << track_index << std::endl;
+        if (I("trk_BX", track_index)!=0) continue;							//Take only tracks with BX0 
 
         //loop over unpacked tracks that are matched with high pT reco muons         
-        for (int iUnpTrkHits = 0; iUnpTrkHits < I("unp_trk_nHits", track_index); iUnpTrkHits++){
-           if (I("unp_trk_found_hits", track_index) != 1) continue;  					// For a very small fraction of unpacked tracks, can't find all hits (mostly BX != 0) 
-           int iHit = I("unp_trk_iHit", track_index, iUnpTrkHits);  					// Access the index of each hit in the track
+        for (int iTrkHits = 0; iTrkHits < I("trk_nHits", track_index); iTrkHits++){
+           //if (I("trk_found_hits", track_index) != 1) continue;  					// For a very small fraction of unpacked tracks, can't find all hits (mostly BX != 0) 
+           int iHit = I("trk_iHit", track_index, iTrkHits);  						// Access the index of each hit in the track
            if (I("hit_isCSC", iHit) != 1) continue;							// get rid of RPC hits
-           std::cout << I("hit_station", iHit) << std::endl;
+           if (I("hit_match_iSeg", iHit) < 0) continue;
+           int iSeg = I("hit_match_iSeg", iHit);
+
+           //=========================================================================================
+           //begin fills for each station and ring (skipping ME1/3)
+           if (I("seg_nRecHits",iSeg) < 5 ) continue;
+           //bendx = TMath::ATan2( F("seg_segDiry",iSeg), abs(F("seg_segDirz",iSeg)) );
+           bendx = F("seg_chi2", iSeg);
+           if (I("hit_station", iHit)==1){
+	      if (I("hit_ring", iHit)==1 || I("hit_ring", iHit)==4){
+                 //h11->Fill(I("seg_nRecHits",iSeg),1); 
+                 h11->Fill(bendx,1);
+              }else if (I("hit_ring", iHit)==2){
+                 //h12->Fill(I("seg_nRecHits",iSeg),1);
+                 h12->Fill(bendx,1);
+              }
+           }//end station 1 fills
+           else if (I("hit_station", iHit)==2){
+              if (I("hit_ring", iHit)==1){
+                 //h21->Fill(I("seg_nRecHits",iSeg),1);
+                 h21->Fill(bendx,1);
+              }else if (I("hit_ring", iHit)==2){
+                 //h22->Fill(I("seg_nRecHits",iSeg),1);
+                 h22->Fill(bendx,1);
+              }
+           }//end station 2 fills
+           else if (I("hit_station", iHit)==3){
+              if (I("hit_ring", iHit)==1){
+                 //h31->Fill(I("seg_nRecHits",iSeg),1);
+                 h31->Fill(bendx,1);
+              }else if (I("hit_ring", iHit)==2){
+                 //h32->Fill(I("seg_nRecHits",iSeg),1);
+                 h32->Fill(bendx,1);
+              }
+           }//end station 3 fills
+           else if (I("hit_station", iHit)==4){
+              if (I("hit_ring", iHit)==1){
+                 //h41->Fill(I("seg_nRecHits",iSeg),1);
+                 h41->Fill(bendx,1);
+              }else if (I("hit_ring", iHit)==2){
+                 //h42->Fill(I("seg_nRecHits",iSeg),1);
+                 h42->Fill(bendx,1);
+              }
+           }//end station 4 fills
+           //=========================================================================================
+
         }//end unpacked track loop
 
      }//end reco muon loop
 
    }//end event loop
+
+   //Might as well label things
+   h11->GetXaxis()->SetTitle(xaxis);
+   h11->GetYaxis()->SetTitle(yaxis);
+
+   h12->GetXaxis()->SetTitle(xaxis);
+   h12->GetYaxis()->SetTitle(yaxis);
+
+   h21->GetXaxis()->SetTitle(xaxis);
+   h21->GetYaxis()->SetTitle(yaxis);
+
+   h22->GetXaxis()->SetTitle(xaxis);
+   h22->GetYaxis()->SetTitle(yaxis);
+
+   h31->GetXaxis()->SetTitle(xaxis);
+   h31->GetYaxis()->SetTitle(yaxis);
+
+   h32->GetXaxis()->SetTitle(xaxis);
+   h32->GetYaxis()->SetTitle(yaxis);
+
+   h41->GetXaxis()->SetTitle(xaxis);
+   h41->GetYaxis()->SetTitle(yaxis);
+
+   h42->GetXaxis()->SetTitle(xaxis);
+   h42->GetYaxis()->SetTitle(yaxis);
+
+   //Cleaning up after ourselves
+   std::cout << "\n******* Finished looping over the events *******" << std::endl;
+   delete in_chain;
+   std::cout << "\nDone with Read_FlatNtuple(). Exiting.\n" << std::endl;
+   fout->Write();
 
 }//end void
 
