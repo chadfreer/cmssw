@@ -27,6 +27,8 @@ namespace l1t {
       neighbor(-99), mpc_link(-99), pc_sector(-99), pc_station(-99), pc_chamber(-99), pc_segment(-99),
       wire(-99), strip(-99), strip_hi(-99), strip_low(-99), track_num(-99), quality(-99),
       pattern(-99), bend(-99), valid(-99), sync_err(-99), bc0(-99), bx(-99), stub_num(-99),
+      alct_quality(-99), alct_accel(-99), alct_collis(-99),
+      clct_quality(-99), clct_pattern(-99), clct_bend(-99),
       phi_fp(-99), theta_fp(-99), phzvl(-99), ph_hit(-99), zone_hit(-99), zone_code(-99),
       fs_segment(-99), fs_zone_code(-99), bt_station(-99), bt_segment(-99),
       phi_loc(-99), phi_glob(-999), theta(-99), eta(-99),
@@ -97,6 +99,12 @@ namespace l1t {
     void set_bc0          (int  bits) { bc0          = bits; }
     void set_bx           (int  bits) { bx           = bits; }
     void set_stub_num     (int  bits) { stub_num     = bits; }
+    void set_alct_quality (int  bits) { alct_quality = bits; }
+    void set_alct_accel   (int  bits) { alct_accel   = bits; }
+    void set_alct_collis  (int  bits) { alct_collis  = bits; }
+    void set_clct_quality (int  bits) { clct_quality = bits; }
+    void set_clct_pattern (int  bits) { clct_pattern = bits; }
+    void set_clct_bend    (int  bits) { clct_bend    = bits; }
     void set_phi_fp       (int  bits) { phi_fp       = bits; }
     void set_theta_fp     (int  bits) { theta_fp     = bits; }
     void set_phzvl        (int  bits) { phzvl        = bits; }
@@ -150,6 +158,12 @@ namespace l1t {
     int   BC0          ()  const { return bc0         ; }
     int   BX           ()  const { return bx          ; }
     int   Stub_num     ()  const { return stub_num    ; }
+    int   ALCT_quality ()  const { return alct_quality; }
+    int   ALCT_accel   ()  const { return alct_accel  ; }
+    int   ALCT_collis  ()  const { return alct_collis ; }
+    int   CLCT_quality ()  const { return clct_quality; }
+    int   CLCT_pattern ()  const { return clct_pattern; }
+    int   CLCT_bend    ()  const { return clct_bend   ; }
     int   Phi_fp       ()  const { return phi_fp      ; }
     int   Theta_fp     ()  const { return theta_fp    ; }
     int   Phzvl        ()  const { return phzvl       ; }
@@ -213,6 +227,12 @@ namespace l1t {
     int   bc0         ; //  0 or 1.  Only from unpacked data? - AWB 02.03.17
     int   bx          ; // -3 - +3.
     int   stub_num    ; //  0 or 1.  Only from unpacked data? - AWB 02.03.17
+    int   alct_quality;
+    int   alct_accel  ;
+    int   alct_collis ;
+    int   clct_quality;
+    int   clct_pattern;
+    int   clct_bend   ;
     int   phi_fp      ; //  0 - 4920
     int   theta_fp    ; //  0 - 127
     int   phzvl       ; //  0 -  6.
