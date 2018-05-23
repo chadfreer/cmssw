@@ -22,8 +22,8 @@ root -l Plotter.C
 ```
 ## What is included in the NTuple
 
-Event Info$\qquad$              src/FlatNtupleBranches/EventInfo.cc  
-EMTF Hit$\qquad$                src/FlatNtupleBranches/EMTFHitInfo.cc  
+Event Info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;              src/FlatNtupleBranches/EventInfo.cc  
+EMTF Hit                src/FlatNtupleBranches/EMTFHitInfo.cc  
 EMTF Track              src/FlatNtupleBranches/EMTFTrackInfo.cc  
 Unpacked Tracks         src/FlatNtupleBranches/EMTFUnpTrackInfo.cc  
 CSC Segments            src/FlatNtupleBranches/CSCSegInfo.cc  
