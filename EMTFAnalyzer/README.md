@@ -1,4 +1,4 @@
-# Instructions for running EMTFNTuple code for LCT-Segment matching code:
+# Instructions for LCT-Segment matching code:
 
 ## To Grab code:
 
