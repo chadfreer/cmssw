@@ -7,7 +7,7 @@ cd CMSSW_10_0_0/src
 cmsenv
 git cms-init
 git remote add chadfreer git@github.com:chadfreer/cmssw.git
-git cms-merge-topic -u chadfreer:LCT-Matched-Plotter
+git cms-merge-topic -u chadfreer:Clean_EMTF_Match
 scram b
 ```
 ## To run NTuple code (edit RunTrackFinder_data_NTuple.py to change input datasets/runs):
